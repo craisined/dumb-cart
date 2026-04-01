@@ -34,3 +34,6 @@ const lab_chart_config = {
 };
 const ctx = document.getElementById("lab_chart");
 const lab_chart = new Chart(ctx, lab_chart_config);
+
+
+//edit code yada yada
