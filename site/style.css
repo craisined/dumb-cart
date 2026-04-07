@@ -21,7 +21,11 @@ body{
     color: var(--golden-orange);
 }
 
-#header {
+.dropdown{
+    margin-left: auto;
+}
+
+header {
     width: 100%;
     height: 10vh;
     display: flex;

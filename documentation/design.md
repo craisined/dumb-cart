@@ -4,7 +4,7 @@
 
 ### Frontend
 - HTML, CSS, JS
-- chart.js
+- [chart.js](https://www.chartjs.org/)
 
 ### Cart Client
 - C
