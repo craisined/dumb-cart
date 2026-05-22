@@ -7,22 +7,6 @@ void setup() {
     Serial.begin(9600);
 }
 
-float get_force() {
-
-}
-
-float get_velocity() {
-
-}
-
-float get_accel() {
-
-}
-
-float get_gyro() {
-    
-}
-
 void loop() {
     Serial.println("Hello world");
 }
