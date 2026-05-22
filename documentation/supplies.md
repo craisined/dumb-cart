@@ -7,6 +7,7 @@
 - [Optical Encoder](https://wiki.seeedstudio.com/Grove-Optical_Rotary_Encoder-TCUT1600X01/)
 - [Microcontroller](https://www.seeedstudio.com/Seeed-Studio-XIAO-ESP32C6-p-5884.html)
 - [Expansion Board](https://www.seeedstudio.com/Grove-Shield-for-Seeeduino-XIAO-p-4621.html)
+- [Battery](https://www.adafruit.com/product/1570?gad_source=1&gad_campaignid=21079227318&gclid=Cj0KCQjw_b_QBhCSARIsAP6hR4c6ZCcQthetiIMa01APFQrdak36FVUjFKaYCk1Y4jQ0-81ajOY0bkEaAh0GEALw_wcB)
 
 ## Replacements
 - [ADC](https://www.adafruit.com/product/5974?srsltid=AfmBOoo9dlE6C0o0aA5RI1wM7DKNIzVjHAOOO0cvW8AnP-pazbRviP3u) (requires Grove pigtail cables)

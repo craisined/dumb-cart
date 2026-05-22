@@ -19,6 +19,10 @@ float get_accel() {
 
 }
 
+float get_gyro() {
+    
+}
+
 void loop() {
     Serial.println("Hello world");
 }
