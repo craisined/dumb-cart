@@ -21,23 +21,23 @@ class Sensors{
 
 public:
     void begin(){
-        this.accelerometer.begin();
-        this.load_cell.begin();
+        accelerometer.begin();
+        load_cell.begin();
         for (uint8_t t=0; t<3; t++) {
-            this.load_cell.tareA(this.load_cell.readChannelRaw(CHAN_A_GAIN_128));
+            load_cell.tareA(load_cell.readChannelRaw(CHAN_A_GAIN_128));
         }
     }
 
     float get_acceleration(){
-        return this.accelerometer.readFloatAccelX() * gravity;
+        return accelerometer.readFloatAccelX() * gravity;
     }
 
     float get_force(){
-        return this.load_cell.readChannelBlocking(CHAN_A_GAIN_128);
+        return load_cell.readChannelBlocking(CHAN_A_GAIN_128);
     }
 
     float get_encoder_pos(){
-        return this.encoder.read();
+        return encoder.read();
     }
 
 };
