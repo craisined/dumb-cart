@@ -22,6 +22,21 @@ Encoder encoder(encoder_pin_1, encoder_pin_2);
 
 const String service_uuid = "907da526-6f31-42c6-8b17-4fa0c76ad1d7";
 const String characteristic_uuid = "b05f71fc-c06c-47b0-ad5c-623db0469d4d";
+BLECharacteristic *force_characteristic;
+bool device_connected = false;
+
+class CartServerCallbacks: public BLEServerCallbacks {
+    void onConnect(BLEServer* pServer) {
+        Serial.println("Device Connected");
+        device_connected = true;
+    };
+
+    void onDisconnect(BLEServer* pServer) {
+        Serial.println("Device Disconnected");
+        device_connected = false;
+        pServer->getAdvertising()->start();
+    }
+};
 
 void begin_sensors(){
     accelerometer.begin();
@@ -46,12 +61,14 @@ float get_encoder_pos(){
 void begin_bluetooth(){
     BLEDevice::init("Dumb Cart");
     BLEServer *pServer = BLEDevice::createServer();
+    pServer->setCallbacks(new CartServerCallbacks());
+
     BLEService *pService = pServer->createService(service_uuid);
-    BLECharacteristic *pCharacteristic = pService->createCharacteristic(
+    force_characteristic = pService->createCharacteristic(
         characteristic_uuid,
         BLECharacteristic::PROPERTY_READ
     );
-    pCharacteristic->setValue("Hello World");
+    force_characteristic->setValue("Hello World");
     pService->start();
 
     BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -68,5 +85,7 @@ void setup() {
 
 void loop() {
     Serial.println(get_force());
-    Serial.println(get_acceleration());
+    force_characteristic->setValue(get_force());
+    force_characteristic->notify();
+    delay(1000);
 }
