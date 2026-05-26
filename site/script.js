@@ -2,6 +2,7 @@ const service_uuid = "907da526-6f31-42c6-8b17-4fa0c76ad1d7";
 const characteristic_uuid = "383dfe4a-06d1-49bc-862f-06841d591a7e";
 
 const connect_btn = document.getElementById("connect");
+const disconnect_btn = document.getElementById("disconnect");
 
 let ble_server;
 let ble_service;
@@ -46,4 +47,13 @@ async function connect(event){
     console.log("Connected!");
 }
 
+async function disconnect(event){
+    if (ble_server && ble_server.connected){
+        return null;
+    }
+    ble_sensor_characteristic.stopNotifications();
+    ble_server.disconnect();
+}
+
 connect_btn.addEventListener("click", connect);
+disconnect_btn.addEventListener("click", disconnect);
