@@ -35,8 +35,7 @@ async function connect(event){
         return null;
     }
     const device = await navigator.bluetooth.requestDevice({
-        filters: [{name: "Dumb Cart"}],
-        optionalServices: [service_uuid]
+        filters: [{ services: [service_uuid] }],
     })
     console.log("Device: ", device.name);
     const ble_server = await device.gatt.connect();
