@@ -29,22 +29,21 @@ function handle_characteristic_change(event){
     console.log(sensors);
 }
 
-function connect(event){
+async function connect(event){
     if (!web_bluetooth_enabled()){
         return null;
     }
-    navigator.bluetooth.requestDevice({
+    const device = await navigator.bluetooth.requestDevice({
+        filters: [{name: "Dumb Cart"}],
         optionalServices: [service_uuid]
     })
-    .then(device => {
-        console.log("Device: ", device.name);
-        ble_server = device.gatt.connect();
-        ble_service = ble_server.getPrimaryService(service_uuid);
-        ble_sensor_characteristic = ble_service.getCharacteristic(characteristic_uuid);
-        ble_sensor_characteristic.startNotifications();
-        ble_sensor_characteristic.addEventListener('characteristicvaluechanged', handle_characteristic_change);
-        console.log("Connected!");
-    })
+    console.log("Device: ", device.name);
+    const ble_server = await device.gatt.connect();
+    const ble_service = await ble_server.getPrimaryService(service_uuid);
+    const ble_sensor_characteristic = await ble_service.getCharacteristic(characteristic_uuid);
+    ble_sensor_characteristic.startNotifications();
+    ble_sensor_characteristic.addEventListener('characteristicvaluechanged', handle_characteristic_change);
+    console.log("Connected!");
 }
 
-connect_btn.addEventListener(connect);
+connect_btn.addEventListener("click", connect);
