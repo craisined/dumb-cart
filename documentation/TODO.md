@@ -5,7 +5,7 @@
 - Get parts working ✅
 - Test BLE ✅
 - Connect BLE to parts ✅
-- Final revision
+- Final revision ✅
 
 ## Modeling
 - Aquire parts
