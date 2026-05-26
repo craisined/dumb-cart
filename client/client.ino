@@ -25,6 +25,7 @@ Encoder encoder(encoder_pin_1, encoder_pin_2);
 float acceleration;
 float force;
 float encoder_position;
+int time;
 
 const String service_uuid = "907da526-6f31-42c6-8b17-4fa0c76ad1d7";
 const String acceleration_characteristic_uuid = "383dfe4a-06d1-49bc-862f-06841d591a7e";
@@ -112,6 +113,7 @@ void update_sensors(){
     acceleration = get_acceleration();
     force = get_force();
     encoder_position = get_encoder_position();
+    time = millis();
 }
 
 void update_bluetooth(){
