@@ -1,12 +1,12 @@
-#include <LSM6DS3.h>
-#include <Wire.h>
-#include <Encoder.h>
 #include <Adafruit_HX711.h>
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <BLE2901.h>
 #include <BLE2904.h>
+#include <Encoder.h>
+#include <LSM6DS3.h>
+#include <Wire.h>
 
 const float gravity = 9.81;
 const float tick_circumference = 1;
