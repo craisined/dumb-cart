@@ -46,3 +46,5 @@ function connect(event){
         console.log("Connected!");
     })
 }
+
+connect_btn.addEventListener(connect);
