@@ -18,5 +18,6 @@
 - Design website visuals
 - Create chart.js chart
 - Connect chart to BLE
+    - Conenct website to BLE ✅
 - Connect website controls to chart
 - Final revision
