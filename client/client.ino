@@ -11,9 +11,6 @@
 const float gravity = 9.81;
 const float tick_circumference = 1;
 
-const uint8_t newtons_ble_code = 0x2723;
-const uint8_t unitless_ble_code = 0x2700;
-
 // accelerometer attaches to I2C slot, load cell attaches to A0/D0 slot, encoder attaches to UART slot
 const uint8_t accelerometer_addr = 0x6A;
 const uint8_t load_cell_data_pin = D0;
@@ -24,6 +21,10 @@ const uint8_t encoder_pin_2 = D6;
 LSM6DS3 accelerometer(I2C_MODE, accelerometer_addr);
 Adafruit_HX711 load_cell(load_cell_data_pin, load_cell_clock_pin);
 Encoder encoder(encoder_pin_1, encoder_pin_2);
+
+float acceleration;
+float force;
+float encoder_position;
 
 const String service_uuid = "907da526-6f31-42c6-8b17-4fa0c76ad1d7";
 const String acceleration_characteristic_uuid = "383dfe4a-06d1-49bc-862f-06841d591a7e";
@@ -37,6 +38,11 @@ BLECharacteristic *acceleration_characteristic_ptr;
 BLECharacteristic *force_characteristic_ptr;
 BLECharacteristic *encoder_characteristic_ptr;
 BLEAdvertising *advertising_ptr;
+
+const uint8_t newtons_ble_code = 0x2723;
+const uint8_t unitless_ble_code = 0x2700;
+
+int last_send = 0;
 
 class CartServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* server_ptr) {
@@ -103,9 +109,12 @@ void begin_bluetooth(){
 }
 
 void update_sensors(){
-    float acceleration = get_acceleration();
-    float force = get_force();
-    float encoder_position = get_encoder_position();
+    acceleration = get_acceleration();
+    force = get_force();
+    encoder_position = get_encoder_position();
+}
+
+void update_bluetooth(){
     acceleration_characteristic_ptr->setValue((uint8_t*)&acceleration, 4);
     force_characteristic_ptr->setValue((uint8_t*)&force, 4);
     encoder_characteristic_ptr->setValue((uint8_t*)&encoder_position, 4);
@@ -122,5 +131,7 @@ void setup() {
 
 void loop() {
     update_sensors();
-    delay(1000);
+    if (millis() - last_send > 50){
+        update_bluetooth();
+    }
 }
