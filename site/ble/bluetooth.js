@@ -72,7 +72,7 @@ function handle_characteristic_change(event){
     sensor_data.force.push(force);
     sensor_data.encoder.push(encoder);
     sensor_data.time.push(time);
-    chart.data.datasets[0].data.push({x: time, y: acceleration});
+    chart.data.datasets[0].data.push({x: time, y: force});
     chart.update();
 }
 
