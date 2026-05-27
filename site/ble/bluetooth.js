@@ -26,7 +26,7 @@ function web_bluetooth_enabled(){
 
 function handle_characteristic_change(event){
     let buffer = event.target.value.buffer;
-    let sensor_dataview = new dataView(buffer);
+    let sensor_dataview = new DataView(buffer);
     let offset = 0;
     let acceleration = sensor_dataview.getFloat32(offset, true);
     let force = sensor_dataview.getFloat32(offset += 4, true);
@@ -36,7 +36,8 @@ function handle_characteristic_change(event){
     sensor_data.force.push(force);
     sensor_data.encoder.push(encoder);
     sensor_data.time.push(time);
-    console.log(sensors);
+    console.log(acceleration);
+    console.log(time);
 }
 
 async function connect(event){
@@ -66,4 +67,45 @@ async function disconnect(event){
 connect_btn.addEventListener("click", connect);
 disconnect_btn.addEventListener("click", disconnect);
 
-export {sensor_data};
+const ctx = document.getElementById("chart");
+
+console.log(sensor_data.time)
+let datasets = {
+    datasets: [
+        {
+            label: 'Force',
+            data: Array.from(
+                {length: sensor_data.time.length},
+                (_, i) => ({
+                    x: sensor_data.time[i],
+                    y: sensor_data.force[i],
+                })
+            )
+        },
+    ],
+};
+console.log(datasets);
+let options = {
+    responsive: true,
+    scales: {
+        x: {
+            type: 'linear',
+            position: 'bottom'
+        }
+    },
+    plugins: {
+        legend: {
+            position: 'top',
+        },
+        title: {
+            display: true,
+            text: 'Chart.js Line Chart'
+        }
+    }
+};
+
+let chart = new Chart(ctx, {
+    type: "line",
+    data: datasets,
+    options: options
+})
