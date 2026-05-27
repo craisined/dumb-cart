@@ -4,6 +4,8 @@ const characteristic_uuid = "383dfe4a-06d1-49bc-862f-06841d591a7e";
 const connect_btn = document.getElementById("connect");
 const disconnect_btn = document.getElementById("disconnect");
 
+const ctx = document.getElementById("chart");
+
 let ble_server;
 let ble_service;
 let ble_sensor_characteristic;
@@ -99,5 +101,3 @@ async function disconnect(event){
 
 connect_btn.addEventListener("click", connect);
 disconnect_btn.addEventListener("click", disconnect);
-
-const ctx = document.getElementById("chart");
