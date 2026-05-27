@@ -8,6 +8,13 @@ let ble_server;
 let ble_service;
 let ble_sensor_characteristic;
 
+let sensor_data = {
+    acceleration: [],
+    force: [],
+    encoder: [],
+    time: [],
+};
+
 function web_bluetooth_enabled(){
     if (navigator.bluetooth){
         console.log("Bluetooth enabled!");
@@ -19,14 +26,16 @@ function web_bluetooth_enabled(){
 
 function handle_characteristic_change(event){
     let buffer = event.target.value.buffer;
-    let dataview = new DataView(buffer);
+    let sensor_dataview = new dataView(buffer);
     let offset = 0;
-    let sensors = {
-        acceleration: dataview.getFloat32(offset, true),
-        force: dataview.getFloat32(offset += 4, true),
-        encoder: dataview.getFloat32(offset += 4, true),
-        time: dataview.getInt32(offset += 4, true)
-    };
+    let acceleration = sensor_dataview.getFloat32(offset, true);
+    let force = sensor_dataview.getFloat32(offset += 4, true);
+    let encoder = sensor_dataview.getFloat32(offset += 4, true);
+    let time = sensor_dataview.getInt32(offset += 4, true);
+    sensor_data.acceleration.push(acceleration);
+    sensor_data.force.push(force);
+    sensor_data.encoder.push(encoder);
+    sensor_data.time.push(time);
     console.log(sensors);
 }
 
@@ -56,3 +65,5 @@ async function disconnect(event){
 
 connect_btn.addEventListener("click", connect);
 disconnect_btn.addEventListener("click", disconnect);
+
+export {sensor_data};
