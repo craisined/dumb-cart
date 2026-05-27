@@ -92,10 +92,9 @@ async function connect(event){
 }
 
 async function disconnect(event){
-    if (ble_server && ble_server.connected){
+    if (!ble_server || !ble_server.connected){
         return null;
     }
-    ble_sensor_characteristic.stopNotifications();
     ble_server.disconnect();
 }
 
