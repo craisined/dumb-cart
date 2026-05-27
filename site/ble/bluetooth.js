@@ -97,6 +97,7 @@ async function disconnect(event){
         return null;
     }
     ble_server.disconnect();
+    console.log("Disconnected!");
 }
 
 connect_btn.addEventListener("click", connect);
