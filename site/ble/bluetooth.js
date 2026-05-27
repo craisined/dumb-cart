@@ -73,6 +73,7 @@ function handle_characteristic_change(event){
     sensor_data.encoder.push(encoder);
     sensor_data.time.push(time);
     chart.data.datasets[0].data.push({x: time, y: acceleration});
+    chart.update();
 }
 
 async function connect(event){
