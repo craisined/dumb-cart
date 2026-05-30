@@ -1,20 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Quicksand:wght@300..700&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css");
+
+:root {
+    --bg-color: #2b1e22;
+    --bg-subtle-color: #473439;
+    --fg-color: #f1e9eb;
+}
+
 html, body{
     margin: 0;
     height: 100%;
 }
 
-.side-panel{
-    float: right;
-    width: 256px;
+body {
+    color: var(--fg-color);
+    display: grid;
+    font-family: "Quicksand", sans-serif;
+    grid-template-columns: 1fr 384px;
+    grid-template-rows: 1fr 96px;
+    grid-auto-flow: column;
+}
+
+.chart-container {
+    background-color: var(--bg-color);
+}
+
+.controls-container {
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+}
+
+.panel {
+    background-color: var(--bg-subtle-color);
+    grid-row: span 2;
+}
+
+.panel-nav {
+    display: flex;
+    height: 64px;
+}
+
+.panel-nav-btn {
+    background-color: var(--bg-color);
+    flex: 1;
     height: 100%;
 }
 
-.chart{
-    width: calc(100% - 256px);
-    height: calc(100% - 96px);
+.panel-nav-btn:hover{
+    background-color: var(--bg-subtle-color);
 }
 
-.controls{
-    width: calc(100% - 256px);
-    height: 96px;
+.panel-nav-btn-selected {
+    background-color: var(--bg-subtle-color);
 }
