@@ -7,9 +7,9 @@
     --fg-color: #f1e9eb;
 }
 
-html, body{
-    margin: 0;
-    height: 100%;
+html, body {
+    min-width: 768px;
+    width: 100%;
 }
 
 body {
@@ -19,6 +19,18 @@ body {
     grid-template-columns: 1fr 384px;
     grid-template-rows: 1fr 96px;
     grid-auto-flow: column;
+    height: 100dvh;
+    margin: 0;
+}
+
+h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 2rem;
+}
+
+h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 1.5rem;
 }
 
 .chart-container {
@@ -26,16 +38,30 @@ body {
 }
 
 .controls-container {
+    align-items: center;
     background-color: var(--bg-color);
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-size: 48px;
+}
+
+.controls-container > i {
+    font-size: 3rem;
 }
 
 .panel {
     background-color: var(--bg-subtle-color);
     grid-row: span 2;
+    overflow: hidden;
+}
+
+.panel-content {
+    display: none;
+    height: 100%;
+    margin: 16px;
+}
+
+.panel-content-selected {
+    display: block;
 }
 
 .panel-nav {
@@ -44,15 +70,22 @@ body {
 }
 
 .panel-nav-btn {
+    align-content: center;
     background-color: var(--bg-color);
     flex: 1;
     height: 100%;
+    text-align: center;
 }
 
-.panel-nav-btn:hover{
+.panel-nav-btn > i {
+    font-size: 1.5rem;
+}
+
+.panel-nav-btn:hover {
     background-color: var(--bg-subtle-color);
 }
 
 .panel-nav-btn-selected {
     background-color: var(--bg-subtle-color);
+    flex: 2;
 }
