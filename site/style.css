@@ -5,6 +5,7 @@
     --bg-color: #2b1e22;
     --bg-subtle-color: #473439;
     --fg-color: #f1e9eb;
+    --highlight: 
 }
 
 html, body {
@@ -21,16 +22,23 @@ body {
     grid-auto-flow: column;
     height: 100dvh;
     margin: 0;
+    line-height: 1.4;
 }
 
 h1 {
     font-family: "DM Serif Display", serif;
     font-size: 2rem;
+    line-height: 1.1;
 }
 
 h2 {
     font-family: "DM Serif Display", serif;
     font-size: 1.5rem;
+    line-height: 1.1;
+}
+
+input[type="radio"], input[type="checkbox"]{
+    accent-color: #cd8275;
 }
 
 .chart-container {
