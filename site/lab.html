@@ -27,8 +27,9 @@
         <div class="panel-content">
             <h1>Selection</h1>
         </div>
-        <div class="panel-content panel-content-selected">
+        <div class="panel-content">
             <h1>Axes</h1>
+            <!-- TODO: Custom radio button and checkbox -->
             <form id="axes">
                 <h2>X-Axis</h2>  <!-- Make this smaller via css, not h3 -->
                 <div><label><input type="radio" name="x-axis" value="time" checked>Time</label></div>
@@ -42,10 +43,17 @@
                 <div><label><input type="checkbox" name="y-axis" value="momentum">Momentum</label></div>
             </form>
         </div>
-        <div class="panel-content">
+        <div class="panel-content panel-content-selected">
             <h1>Trials</h1>
             <form id="trials">
-                <div></div>
+                <div>
+                    <h3>Trial 1<span class="trial-btns"><input type="checkbox" name="trial" value=0 checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
+                    <label>Cart Mass: <input type="input" name="mass"> kg</label>
+                </div>
+                <div>
+                    <h3>Trial 2<span class="trial-btns"><input type="checkbox" name="trial" value=1 checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
+                    <label>Cart Mass: <input type="input" name="mass"> kg</label>
+                </div>
             </form>
         </div>
         <div class="panel-content">

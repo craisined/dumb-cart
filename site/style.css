@@ -5,7 +5,7 @@
     --bg-color: #2b1e22;
     --bg-subtle-color: #473439;
     --fg-color: #f1e9eb;
-    --highlight: 
+    --highlight: #cd8275;
 }
 
 html, body {
@@ -37,8 +37,25 @@ h2 {
     line-height: 1.1;
 }
 
-input[type="radio"], input[type="checkbox"]{
-    accent-color: #cd8275;
+h3 {
+    font-family: "Quicksand", sans-serif;
+    font-size: 1.2rem;
+    margin-block-end: 0.2rem;
+}
+
+input[type="input"] {
+    accent-color: var(--highlight);
+    background-color: var(--bg-color);
+    border-color: var(--highlight);
+    border-style: solid;
+    border-radius: 0.5rem;
+    color: var(--fg-color);
+    font-family: "Quicksand", sans-serif;
+    outline: none;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    accent-color: var(--highlight);
 }
 
 .chart-container {
@@ -96,4 +113,12 @@ input[type="radio"], input[type="checkbox"]{
 .panel-nav-btn-selected {
     background-color: var(--bg-subtle-color);
     flex: 2;
+}
+
+.trial-btns {
+    margin-left: 1rem;
+}
+
+.trial-btns > i, .trial-btns > input {
+    padding: 0.1rem;
 }
