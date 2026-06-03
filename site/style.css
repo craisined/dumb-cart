@@ -56,7 +56,7 @@ input[type="input"] {
 
 input[type="button"] {
     font-family: "Quicksand", sans-serif;
-    font-size: 0.8rem;
+    font-size: 1rem;
     border-style: hidden;
     border-radius: 0.5rem;
     color: var(--fg-color);
@@ -69,13 +69,14 @@ input[type="checkbox"], input[type="radio"] {
 
 select {
     font-family: "Quicksand", sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     border-style: hidden;
     border-radius: 0.5rem;
     color: var(--fg-color);
     background-color: var(--bg-color);
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 0.4rem;
+    width: 100%;
 }
 
 .chart-container {
