@@ -18,16 +18,16 @@
 
     <div class="panel">
         <div class="panel-nav">
-            <div class="panel-nav-btn"><i class="bi bi-bounding-box-circles"></i></div>
-            <div class="panel-nav-btn panel-nav-btn-selected"><i class="bi bi-graph-up"></i></div>
-            <div class="panel-nav-btn"><i class="bi bi-table"></i></div>
-            <div class="panel-nav-btn"><i class="bi bi-gear-fill"></i></div>
-            <div class="panel-nav-btn"><i class="bi bi-download"></i></div>
+            <div class="panel-nav-btn" data-tab-target="#selection-panel"><i class="bi bi-bounding-box-circles"></i></div>
+            <div class="panel-nav-btn panel-nav-btn-selected" data-tab-target="#axes-panel"><i class="bi bi-graph-up"></i></div>
+            <div class="panel-nav-btn" data-tab-target="#trials-panel"><i class="bi bi-table"></i></div>
+            <div class="panel-nav-btn" data-tab-target="#settings-panel"><i class="bi bi-gear-fill"></i></div>
+            <div class="panel-nav-btn" data-tab-target="#export-panel"><i class="bi bi-download"></i></div>
         </div>
-        <div class="panel-content">
+        <div id="selection-panel" class="panel-content" data-tab-content>
             <h1>Selection</h1>
         </div>
-        <div class="panel-content">
+        <div id="axes-panel" class="panel-content panel-content-selected" data-tab-content>
             <h1>Axes</h1>
             <!-- TODO: Custom radio button and checkbox -->
             <form id="axes">
@@ -43,7 +43,7 @@
                 <div><label><input type="checkbox" name="y-axis" value="momentum">Momentum</label></div>
             </form>
         </div>
-        <div class="panel-content">
+        <div id="trials-panel" class="panel-content" data-tab-content>
             <h1>Trials</h1>
             <form id="trials">
                 <div>
@@ -56,10 +56,10 @@
                 </div>
             </form>
         </div>
-        <div class="panel-content">
+        <div id="settings-panel" class="panel-content" data-tab-content>
             <h1>Lab Settings</h1>
         </div>
-        <div class="panel-content panel-content-selected">
+        <div id="export-panel" class="panel-content" data-tab-content>
             <h1>Export</h1>
             <form>
                 <select>

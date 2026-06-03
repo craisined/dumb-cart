@@ -107,7 +107,7 @@ select {
 }
 
 .panel-content-selected {
-    display: block;
+    display: block !important;
 }
 
 .panel-nav {
