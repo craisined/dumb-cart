@@ -54,8 +54,28 @@ input[type="input"] {
     outline: none;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type="button"] {
+    font-family: "Quicksand", sans-serif;
+    font-size: 0.8rem;
+    border-style: hidden;
+    border-radius: 0.5rem;
+    color: var(--fg-color);
+    background-color: var(--highlight);
+}
+
+input[type="checkbox"], input[type="radio"] {
     accent-color: var(--highlight);
+}
+
+select {
+    font-family: "Quicksand", sans-serif;
+    font-size: 1.2rem;
+    border-style: hidden;
+    border-radius: 0.5rem;
+    color: var(--fg-color);
+    background-color: var(--bg-color);
+    display: block;
+    margin-bottom: 1rem;
 }
 
 .chart-container {

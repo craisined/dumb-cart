@@ -43,7 +43,7 @@
                 <div><label><input type="checkbox" name="y-axis" value="momentum">Momentum</label></div>
             </form>
         </div>
-        <div class="panel-content panel-content-selected">
+        <div class="panel-content">
             <h1>Trials</h1>
             <form id="trials">
                 <div>
@@ -59,8 +59,17 @@
         <div class="panel-content">
             <h1>Lab Settings</h1>
         </div>
-        <div class="panel-content">
+        <div class="panel-content panel-content-selected">
             <h1>Export</h1>
+            <form>
+                <select>
+                    <option value="png">PNG</option>
+                    <option value="jpg">JPEG</option>
+                    <option value="csv">CSV</option>
+                    <option value="json">JSON</option>
+                </select>
+                <input type="button" value="Export">
+            </form>
         </div>
     </div>
     
