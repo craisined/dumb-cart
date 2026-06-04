@@ -59,20 +59,23 @@
         <div id="settings-panel" class="panel-content" data-tab-content>
             <h1>Lab Settings</h1>
         </div>
+
+        
         <div id="export-panel" class="panel-content" data-tab-content>
             <h1>Export</h1>
             <form>
-                <select>
+                <select id="export-format">
                     <option value="png">PNG</option>
                     <option value="jpg">JPEG</option>
                     <option value="csv">CSV</option>
                     <option value="json">JSON</option>
                 </select>
-                <input type="button" value="Export">
+                <button type="button" id="export-trigger">Export</button>
             </form>
         </div>
     </div>
     
+
 </body>
 <script src="script.js"></script>
 
