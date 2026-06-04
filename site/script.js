@@ -31,7 +31,6 @@ function exportPNG() {
 }
 
 function exportJPEG() {
-  // JPEG needs a white background painted first
   const copy = document.createElement('canvas');
   copy.width = canvas.width;
   copy.height = canvas.height;
