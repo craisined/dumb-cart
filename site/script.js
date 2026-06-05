@@ -1,26 +1,26 @@
-const chart_canvas = document.getElementById('chart');
-
-// Tab switching code
+//Tab switching code
 const nav_tabs = document.querySelectorAll('.panel-nav-btn');
+const tab_contents = document.querySelectorAll('.panel-content');
 
 nav_tabs.forEach(tab => {
     tab.addEventListener('click', () => {
         const target = document.querySelector(tab.dataset.tabTarget);
-        previous_active_tab = document.querySelector('.panel-nav-btn-selected');
-        previous_active_tab.classList.remove('panel-nav-btn-selected');
-        previous_active_tab_content = document.querySelector('.panel-content-selected');
-        previous_active_tab_content.classList.remove('panel-content-selected');
+        nav_tabs.forEach(tab => {
+            tab.classList.remove('panel-nav-btn-selected');
+        })
+        tab_contents.forEach(tab_content => {
+            tab_content.classList.remove('panel-content-selected');
+        })
         tab.classList.add('panel-nav-btn-selected');
         target.classList.add('panel-content-selected');
     })
 });
 
-// Export code
+//Export code
+const canvas = document.getElementById('chart');
 document.getElementById('export-trigger').addEventListener('click', () => {
-    const format = document.getElementById('export-format').value;
-    if (format === 'png' || format === 'jpeg') {
-        export_image(format);
-    }
+  const format = document.getElementById('export-format').value;
+  format === 'png' ? exportPNG() : exportJPEG();
 });
 
 function exportPNG() {
@@ -31,7 +31,6 @@ function exportPNG() {
 }
 
 function exportJPEG() {
-  // JPEG needs a white background painted first
   const copy = document.createElement('canvas');
   copy.width = canvas.width;
   copy.height = canvas.height;
