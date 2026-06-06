@@ -131,7 +131,6 @@ select {
     background-color: var(--bg-subtle-color);
 }
 
-/* TODO: add animation */
 .panel-nav-btn-selected {
     background-color: var(--bg-subtle-color);
     flex: 2;
