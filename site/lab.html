@@ -14,8 +14,13 @@
     </div>
 
     <div class="controls-container">
+        <!-- Optional TODO: add functionality where the zoom-spacer is -->
+        <div class="zoom-spacer"></div>
         <i class="bi bi-play-circle-fill"></i>
-        <!--TODO: need to add zoom buttons-->
+        <div class="zoom-controls-container">
+            <i class="bi bi-zoom-in"></i>
+            <i class="bi bi-zoom-out"></i>
+        </div>
     </div>
 
 
@@ -48,38 +53,36 @@
         </div>
         <div id="trials-panel" class="panel-content" data-tab-content>
             <h1>Trials</h1>
-            <form id="trials">
-                <div>
-                    <h3>Trial 1<span class="trial-btns"><input type="checkbox" name="trial" value=0 checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
-                    <label>Cart Mass: <input type="input" name="mass"> kg</label>
-                </div>
-                <div>
-                    <h3>Trial 2<span class="trial-btns"><input type="checkbox" name="trial" value=1 checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
-                    <label>Cart Mass: <input type="input" name="mass"> kg</label>
-                </div>
-            </form>
+            <div>
+                <h3>Trial 1<span class="trial-btns"><input type="checkbox" name="trial" value=0 checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
+                <label>Cart Mass: <input type="input" name="mass"> kg</label>
+            </div>
+            <div>
+                <h3>Trial 2<span class="trial-btns"><input type="checkbox" name="trial" value=1 checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
+                <label>Cart Mass: <input type="input" name="mass"> kg</label>
+            </div>
         </div>
         <div id="settings-panel" class="panel-content" data-tab-content>
             <h1>Lab Settings</h1>
+            <button type="button" id="">Connect <i class="bi bi-bluetooth"></i></button>
         </div>
 
         
         <div id="export-panel" class="panel-content" data-tab-content>
             <h1>Export</h1>
-            <form>
-                <select id="export-format">
-                    <option value="png">PNG</option>
-                    <option value="jpeg">JPEG</option>
-                    <option value="csv">CSV</option>
-                    <option value="json">JSON</option>
-                </select>
-                <button type="button" id="export-trigger">Export</button>
-            </form>
+            <select id="export-format">
+                <option value="png">PNG</option>
+                <option value="jpeg">JPEG</option>
+                <option value="csv">CSV</option>
+                <option value="json">JSON</option>
+            </select>
+            <button type="button" id="export-trigger">Export</button>
         </div>
     </div>
     
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
 <script src="script.js"></script>
 
 </html>

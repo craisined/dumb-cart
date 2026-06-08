@@ -26,12 +26,12 @@ body {
 }
 
 button {
-    font-family: "Quicksand", sans-serif;
-    font-size: 1rem;
+    background-color: var(--highlight);
     border-style: hidden;
     border-radius: 0.5rem;
     color: var(--fg-color);
-    background-color: var(--highlight);
+    font-family: "Quicksand", sans-serif;
+    font-size: 1rem;
 }
 
 h1 {
@@ -77,6 +77,10 @@ select {
     display: block;
     margin-bottom: 0.4rem;
     width: 100%;
+}
+
+#chart {
+    padding: 1rem;
 }
 
 .chart-container {
@@ -142,4 +146,21 @@ select {
 
 .trial-btns > i, .trial-btns > input {
     padding: 0.1rem;
+}
+
+.zoom-controls-container {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    margin-right: 1rem;
+}
+
+.zoom-controls-container > i {
+    font-size: 2rem;
+    margin: 0.4rem;
+}
+
+.zoom-spacer {
+    flex: 1;
+    margin-left: 1rem;
 }

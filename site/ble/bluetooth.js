@@ -95,11 +95,9 @@ async function connect(event){
 }
 
 async function disconnect(event){
-    /*
-    if (!ble_server || !ble_server.connected){
-        return null;
+    if (!ble_device || !ble_device.gatt.connected){
+        console.log("Already disconnected");
     }
-    */
     ble_device.gatt.disconnect();
     console.log("Disconnected!");
 }
