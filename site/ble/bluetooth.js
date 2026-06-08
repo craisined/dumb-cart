@@ -6,6 +6,7 @@ const disconnect_btn = document.getElementById("disconnect");
 
 const ctx = document.getElementById("chart");
 
+let ble_device;
 let ble_server;
 let ble_service;
 let ble_sensor_characteristic;
@@ -27,6 +28,7 @@ let datasets = {
 };
 
 let options = {
+    animation: false,
     responsive: true,
     scales: {
         x: {
@@ -72,7 +74,7 @@ function handle_characteristic_change(event){
     sensor_data.force.push(force);
     sensor_data.encoder.push(encoder);
     sensor_data.time.push(time);
-    chart.data.datasets[0].data.push({x: time, y: force});
+    chart.data.datasets[0].data.push({x: time, y: acceleration});
     chart.update();
 }
 
@@ -80,11 +82,11 @@ async function connect(event){
     if (!web_bluetooth_enabled()){
         return null;
     }
-    const device = await navigator.bluetooth.requestDevice({
+    ble_device = await navigator.bluetooth.requestDevice({
         filters: [{ services: [service_uuid] }],
     })
-    console.log("Device: ", device.name);
-    const ble_server = await device.gatt.connect();
+    console.log("Device: ", ble_device.name);
+    const ble_server = await ble_device.gatt.connect();
     const ble_service = await ble_server.getPrimaryService(service_uuid);
     const ble_sensor_characteristic = await ble_service.getCharacteristic(characteristic_uuid);
     ble_sensor_characteristic.startNotifications();
@@ -93,10 +95,12 @@ async function connect(event){
 }
 
 async function disconnect(event){
+    /*
     if (!ble_server || !ble_server.connected){
         return null;
     }
-    ble_server.disconnect();
+    */
+    ble_device.gatt.disconnect();
     console.log("Disconnected!");
 }
 
