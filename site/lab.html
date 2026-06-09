@@ -16,7 +16,7 @@
     <div class="controls-container">
         <!-- Optional TODO: add functionality where the zoom-spacer is -->
         <div class="zoom-spacer"></div>
-        <i class="bi bi-play-circle-fill"></i>
+        <i class="bi bi-play-circle-fill" id="start-trial-btn"></i>
         <div class="zoom-controls-container">
             <i class="bi bi-zoom-in"></i>
             <i class="bi bi-zoom-out"></i>
@@ -39,9 +39,9 @@
             <h1>Axes</h1>
             <!-- TODO: Custom radio button and checkbox -->
             <form id="axes">
-                <h2>X-Axis</h2>  <!-- Make this smaller via css, not h3 -->
+                <h2>X-Axis</h2>
                 <div><label><input type="radio" name="x-axis" value="time" checked>Time</label></div>
-                <div><label><input type="radio" name="x-axis" value="displacement">Displacement</label></div>
+                <!-- <div><label><input type="radio" name="x-axis" value="displacement">Displacement</label></div> -->
                 <h2>Y-Axis</h2>
                 <div><label><input type="checkbox" name="y-axis" value="displacement">Displacement</label></div>
                 <div><label><input type="checkbox" name="y-axis" value="velocity">Velocity</label></div>
@@ -64,7 +64,9 @@
         </div>
         <div id="settings-panel" class="panel-content" data-tab-content>
             <h1>Lab Settings</h1>
-            <button type="button" id="">Connect <i class="bi bi-bluetooth"></i></button>
+            <h2>Carts</h2>
+            <button type="button" id="connect-btn">Connect <i class="bi bi-bluetooth"></i></button>
+            <button type="button" id="disconnect-btn">Disconnect <i class="bi bi-x-lg"></i></button>
         </div>
 
         
