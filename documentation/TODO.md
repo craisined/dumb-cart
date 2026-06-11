@@ -8,15 +8,15 @@
 - Final revision ✅
 
 ## Modeling
-- Aquire parts
-- Design layout
-- Create initial CAD
+- Aquire parts ✅
+- Design layout ✅
+- Create initial CAD ✅
 - Assembly
 - Final revision
 
 ## Website
-- Design website visuals
-- Create chart.js chart
+- Design website visuals ✅ (ish but good enough for now)
+- Create chart.js chart ✅
 - Connect chart to BLE
     - Conenct website to BLE ✅
 - Connect website controls to chart
