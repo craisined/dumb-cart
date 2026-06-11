@@ -105,20 +105,29 @@ connect_btn.addEventListener("click", connect_cart);
 disconnect_btn.addEventListener("click", disconnect_cart);
 
 // Trial
+let trials = [];
 let active_trial;
-let active_trial_start;
 
 function toggle_trial(event){
     if (!sensor_data) {
         return null;
     }
     if (!active_trial){
-        active_trial = [];
-        active_trial_start = sensor_data.time;
+        active_trial = {
+            start_time: sensor_data.time,
+            time: [],
+            acceleration: [],
+            force: [],
+            encoder: [],
+        };
         update_trial();
+        start_trial_btn.classList.remove("bi-play-circle-fill");
+        start_trial_btn.classList.add("bi-pause-circle-fill");
     } else {
-        console.log(active_trial);
+        trials.push(active_trial);
         active_trial = null;
+        start_trial_btn.classList.remove("bi-pause-circle-fill");
+        start_trial_btn.classList.add("bi-play-circle-fill");
     }
 }
 
@@ -127,12 +136,29 @@ function update_trial(){
         return null;
     }
     let data = structuredClone(sensor_data);
-    data.time = (data.time - active_trial_start) / 1000;
-    active_trial.push(data);
+    data.time = (data.time - active_trial.start_time) / 1000;
+    ["time", "acceleration", "force", "encoder"].forEach(attribute => {
+        active_trial[attribute].push(data[attribute]);
+    });
+    console.log(get_selected_datasets(active_trial));
+    chart.data.datasets = get_selected_datasets(active_trial);
 }
 
 const start_trial_btn = document.getElementById("start-trial-btn");
 start_trial_btn.addEventListener("click", toggle_trial);
+
+// TODO: x-axis stuff
+// Dataset Generation
+function get_selected_datasets(trial){
+    const checkboxes = document.querySelectorAll('input[name="y-axis"]:checked');
+    const selected_vals = Array.from(checkboxes).map(checkbox => checkbox.value);
+    const datasets = selected_vals.map(attribute => ({
+        label: attribute,
+        data: trial.time.map((time, index) => ({x: time, y: trial[attribute][index]})),
+    }));
+    chart.update()
+    return datasets;
+}
 
 // Tab switching
 const nav_tabs = document.querySelectorAll('.panel-nav-btn');

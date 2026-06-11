@@ -38,18 +38,21 @@
         <div id="axes-panel" class="panel-content panel-content-selected" data-tab-content>
             <h1>Axes</h1>
             <!-- TODO: Custom radio button and checkbox -->
-            <form id="axes">
-                <h2>X-Axis</h2>
-                <div><label><input type="radio" name="x-axis" value="time" checked>Time</label></div>
-                <!-- <div><label><input type="radio" name="x-axis" value="displacement">Displacement</label></div> -->
-                <h2>Y-Axis</h2>
-                <div><label><input type="checkbox" name="y-axis" value="displacement">Displacement</label></div>
-                <div><label><input type="checkbox" name="y-axis" value="velocity">Velocity</label></div>
-                <div><label><input type="checkbox" name="y-axis" value="acceleration">Acceleration</label></div>
-                <div><label><input type="checkbox" name="y-axis" value="force">Force</label></div>
-                <div><label><input type="checkbox" name="y-axis" value="work">Work</label></div>
-                <div><label><input type="checkbox" name="y-axis" value="momentum">Momentum</label></div>
-            </form>
+            <h2>X-Axis</h2>
+            <div><label><input type="radio" name="x-axis" value="time" checked>Time</label></div>
+            <!-- <div><label><input type="radio" name="x-axis" value="displacement">Displacement</label></div> -->
+            <h2>Y-Axis</h2>
+            <!-- TODO: Implement these
+            <div><label><input type="checkbox" name="y-axis" value="displacement">Displacement</label></div>
+            <div><label><input type="checkbox" name="y-axis" value="velocity">Velocity</label></div>
+            <div><label><input type="checkbox" name="y-axis" value="acceleration">Acceleration</label></div>
+            <div><label><input type="checkbox" name="y-axis" value="force">Force</label></div>
+            <div><label><input type="checkbox" name="y-axis" value="work">Work</label></div>
+            <div><label><input type="checkbox" name="y-axis" value="momentum">Momentum</label></div>
+            -->
+            <div><label><input type="checkbox" name="y-axis" value="acceleration">Acceleration</label></div>
+            <div><label><input type="checkbox" name="y-axis" value="force">Force</label></div>
+            <div><label><input type="checkbox" name="y-axis" value="encoder">Encoder</label></div>
         </div>
         <div id="trials-panel" class="panel-content" data-tab-content>
             <h1>Trials</h1>
