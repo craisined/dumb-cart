@@ -4,11 +4,12 @@
 
 ### CLI
 
-Install the required board manager for XIAO ESP32C6:
+Install the required board manager and libraries for XIAO ESP32C6:
 ```bash
 arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
 arduino-cli core update-index
 arduino-cli core install esp32:esp32
+arduino-cli lib install "Encoder" "Seeed Arduino LSM6DS3" "Adafruit HX711"
 ```
 
 Upload precompiled binary, replacing `/dev/ttyACM0` with the path of the port the microcontroller is plugged into:
@@ -47,6 +48,6 @@ Cut off the connector, then solder:
 - \- contact → black
 
 #### Connections
-- ADC → D0/D1 port
-- Accelerometer → any I2C port (print is modeled to be connected with the D4/D5 port)
-- Optical encoder → D6/D7 port
+- ADC → D8/D9 port
+- Accelerometer → any I2C port (D4/D5)
+- Optical encoder → D2/D3 port
