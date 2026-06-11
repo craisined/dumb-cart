@@ -127,7 +127,7 @@ function update_trial(){
         return null;
     }
     let data = structuredClone(sensor_data);
-    data.time -= active_trial_start;
+    data.time = (data.time - active_trial_start) / 1000;
     active_trial.push(data);
 }
 

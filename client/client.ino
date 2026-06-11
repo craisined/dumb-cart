@@ -11,10 +11,10 @@ const float gravity = 9.81;
 
 // accelerometer attaches to I2C slot, load cell attaches to A0/D0 slot, encoder attaches to UART slot
 const uint8_t accelerometer_addr = 0x6A;
-const uint8_t load_cell_data_pin = D0; // pins switched here bc of silly
-const uint8_t load_cell_clock_pin = D1;
-const uint8_t encoder_pin_1 = D7;
-const uint8_t encoder_pin_2 = D6;
+const uint8_t load_cell_data_pin = D9;
+const uint8_t load_cell_clock_pin = D8;
+const uint8_t encoder_pin_1 = D3;
+const uint8_t encoder_pin_2 = D2;
 
 LSM6DS3 accelerometer(I2C_MODE, accelerometer_addr);
 Adafruit_HX711 load_cell(load_cell_data_pin, load_cell_clock_pin);
