@@ -20,7 +20,7 @@ const chart_options = {
     animation: false,
     maintainAspectRatio: false,
     layout: {
-        padding: 16
+        padding: 16,
     },
     plugins: {
         legend: {
@@ -33,13 +33,16 @@ const chart_options = {
     responsive: true,
     scales: {
         x: {
+            beginAtZero: true,
             border: { color: fg_color },
             grid: { color: bg_subtle_color },
             type: 'linear',
         },
         y: {
+            beginAtZero: true,
             border: { color: fg_color },
             grid: { color: bg_subtle_color },
+            type: 'linear',
         }
     },
 };
