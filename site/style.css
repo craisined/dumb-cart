@@ -79,10 +79,6 @@ select {
     width: 100%;
 }
 
-#chart {
-    padding: 1rem;
-}
-
 .chart-container {
     background-color: var(--bg-color);
 }

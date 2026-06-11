@@ -19,6 +19,9 @@ const chart_datasets = {
 const chart_options = {
     animation: false,
     maintainAspectRatio: false,
+    layout: {
+        padding: 16
+    },
     plugins: {
         legend: {
             display: false,
