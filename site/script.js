@@ -124,7 +124,7 @@ function toggle_trial(event){
         start_trial_btn.classList.remove("bi-play-circle-fill");
         start_trial_btn.classList.add("bi-pause-circle-fill");
     } else {
-        trials.push(active_trial);
+        add_trial();
         active_trial = null;
         start_trial_btn.classList.remove("bi-pause-circle-fill");
         start_trial_btn.classList.add("bi-play-circle-fill");
@@ -158,6 +158,21 @@ function get_selected_datasets(trial){
     }));
     chart.update()
     return datasets;
+}
+
+// Trial section fuckery
+let trial_number = 0;
+function add_trial(){
+    trials.push(active_trial);
+    const trials_panel = document.getElementById("trials-panel");
+    trials_panel.insertAdjacentHTML("beforeend", `
+    <div>
+        <h3>Trial ${trial_number}<span class="trial-btns"><input type="checkbox" name="trial" value=${trials_panel} checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
+        <label>Cart Mass: <input type="input" name="mass-${trial_number}"> kg</label>
+    </div>
+    `);
+    trial_number++;
+
 }
 
 // Tab switching
