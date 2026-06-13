@@ -3,6 +3,7 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <BLE2901.h>
+#include <BLE2902.h>
 #include <Encoder.h>
 #include <LSM6DS3.h>
 #include <Wire.h>
@@ -69,6 +70,7 @@ void create_characteristic(BLECharacteristic* &characteristic_ptr, String charac
     descriptor_ptr->setDescription(description);
     descriptor_ptr->setAccessPermissions(ESP_GATT_PERM_READ);
     characteristic_ptr->addDescriptor(descriptor_ptr);
+    characteristic_ptr->addDescriptor(new BLE2902());
 }
 
 void begin_bluetooth(){
@@ -106,5 +108,6 @@ void loop() {
     update_sensors();
     if (millis() - last_send > 50){
         update_bluetooth();
+        last_send = millis();
     }
 }
