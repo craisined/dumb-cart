@@ -7,15 +7,8 @@ const highlight_color = getComputedStyle(document.documentElement).getPropertyVa
 // Initialize chart
 const chart_canvas = document.getElementById('chart');
 Chart.defaults.font.family = "'Quicksand', sans-serif";
-Chart.defaults.color = fg_color; 
-const chart_datasets = {
-    datasets: [
-        {
-            label: 'Force',
-            data: [{x:1,y:1}]
-        },
-    ],
-};
+Chart.defaults.color = fg_color;
+const chart_datasets = { datasets: [] };
 const chart_options = {
     animation: false,
     maintainAspectRatio: false,
@@ -142,6 +135,7 @@ function update_trial(){
     });
     console.log(get_selected_datasets(active_trial));
     chart.data.datasets = get_selected_datasets(active_trial);
+    chart.update();
 }
 
 const start_trial_btn = document.getElementById("start-trial-btn");
@@ -156,7 +150,6 @@ function get_selected_datasets(trial){
         label: attribute,
         data: trial.time.map((time, index) => ({x: time, y: trial[attribute][index]})),
     }));
-    chart.update()
     return datasets;
 }
 
