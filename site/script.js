@@ -109,7 +109,7 @@ let trials = [];
 let active_trial;
 
 function toggle_trial(event){
-    if (!sensor_data) {
+    if (!sensor_data || !ble_device) {
         return null;
     }
     if (!active_trial){
