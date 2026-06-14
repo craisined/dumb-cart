@@ -7,8 +7,15 @@ const highlight_color = getComputedStyle(document.documentElement).getPropertyVa
 // Initialize chart
 const chart_canvas = document.getElementById('chart');
 Chart.defaults.font.family = "'Quicksand', sans-serif";
-Chart.defaults.color = fg_color;
-const chart_datasets = { datasets: [] };
+Chart.defaults.color = fg_color; 
+const chart_datasets = {
+    datasets: [
+        {
+            label: 'Force',
+            data: [{x:1,y:1}]
+        },
+    ],
+};
 const chart_options = {
     animation: false,
     maintainAspectRatio: false,
@@ -21,8 +28,21 @@ const chart_options = {
         },
         title: {
             display: false,
+        },
+        zoom: {
+            zoom: {
+                wheel: {
+                    enabled: true,
+                },
+                pinch: {
+                    enabled: true
+                },
+                mode: 'xy',
+            }
         }
+
     },
+    
     responsive: true,
     scales: {
         x: {
@@ -44,6 +64,8 @@ let chart = new Chart(chart_canvas, {
     data: chart_datasets,
     options: chart_options
 })
+
+
 
 // Bluetooth
 const service_uuid = "907da526-6f31-42c6-8b17-4fa0c76ad1d7";
@@ -135,7 +157,6 @@ function update_trial(){
     });
     console.log(get_selected_datasets(active_trial));
     chart.data.datasets = get_selected_datasets(active_trial);
-    chart.update();
 }
 
 const start_trial_btn = document.getElementById("start-trial-btn");
@@ -150,6 +171,7 @@ function get_selected_datasets(trial){
         label: attribute,
         data: trial.time.map((time, index) => ({x: time, y: trial[attribute][index]})),
     }));
+    chart.update()
     return datasets;
 }
 
