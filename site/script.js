@@ -67,16 +67,16 @@ let chart = new Chart(chart_canvas, {
 })
 
 //zoom buttons
-document.getElementById('zoomIn').addEventListener('click', () => {
-  chart.zoom(1.1); 
+document.getElementById('zoom-in').addEventListener('click', () => {
+    chart.zoom(1.1); 
 });
 
-document.getElementById('zoomOut').addEventListener('click', () => {
-  chart.zoom(0.9); 
+document.getElementById('zoom-out').addEventListener('click', () => {
+    chart.zoom(0.9); 
 });
 
-document.getElementById('zoomReset').addEventListener('click', () => {
-  chart.resetZoom(); 
+document.getElementById('zoom-reset').addEventListener('click', () => {
+    chart.resetZoom(); 
 });
 
 // Bluetooth
