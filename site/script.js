@@ -66,7 +66,18 @@ let chart = new Chart(chart_canvas, {
     options: chart_options
 })
 
+//zoom buttons
+document.getElementById('zoomIn').addEventListener('click', () => {
+  chart.zoom(1.1); 
+});
 
+document.getElementById('zoomOut').addEventListener('click', () => {
+  chart.zoom(0.9); 
+});
+
+document.getElementById('zoomReset').addEventListener('click', () => {
+  chart.resetZoom(); 
+});
 
 // Bluetooth
 const service_uuid = "907da526-6f31-42c6-8b17-4fa0c76ad1d7";
