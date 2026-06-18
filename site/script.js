@@ -5,7 +5,7 @@ Chart.register(SelectDragPlugin);
 const bg_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
 const bg_subtle_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-subtle-color').trim();
 const fg_color = getComputedStyle(document.documentElement).getPropertyValue('--fg-color').trim();
-const highlight_color = getComputedStyle(document.documentElement).getPropertyValue('--hightlight').trim();
+const highlight_color = getComputedStyle(document.documentElement).getPropertyValue('--highlight').trim();
 
 // Initialize chart
 const chart_canvas = document.getElementById('chart');
@@ -34,11 +34,14 @@ const chart_options = {
         },
         selectdrag: {
             enabled: true,
-            output: 'value', // Or 'index' 
-                onSelectComplete: (event) => {
+            output: 'value',
+            onSelectComplete: (event) => {
                 console.log('Selected range:', event.range);
                 console.log('Selection bounding box:', event.boundingBox);
-            }
+            },
+            colors: {
+                selection: bg_subtle_color + "4D",
+            },
         },
         zoom: {
             pan: {
