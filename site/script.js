@@ -1,3 +1,6 @@
+import SelectDragPlugin from '@01coder/chartjs-plugin-selectdrag';
+Chart.register(SelectDragPlugin);
+
 // Colors
 const bg_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
 const bg_subtle_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-subtle-color').trim();
@@ -29,9 +32,18 @@ const chart_options = {
         title: {
             display: false,
         },
+        selectdrag: {
+            enabled: true,
+            output: 'value', // Or 'index' 
+                onSelectComplete: (event) => {
+                console.log('Selected range:', event.range);
+                console.log('Selection bounding box:', event.boundingBox);
+            }
+        },
         zoom: {
             pan: {
                 enabled: true,
+                modifierKey: 'shift',
                 mode: 'xy',
             },
             zoom: {
@@ -41,9 +53,7 @@ const chart_options = {
                 mode: 'xy',
             }
         }
-
     },
-    
     responsive: true,
     scales: {
         x: {
