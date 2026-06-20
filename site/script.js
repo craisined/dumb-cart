@@ -46,7 +46,7 @@ const chart_options = {
         zoom: {
             pan: {
                 enabled: true,
-                modifierKey: 'shift',
+                modifierKey: 'ctrl',
                 mode: 'xy',
             },
             zoom: {
@@ -237,7 +237,7 @@ nav_tabs.forEach(tab => {
     });
 });
 
-// Export image
+//Export image
 document.getElementById('export-trigger').addEventListener('click', () => {
     const format = document.getElementById('export-format').value;
     if (format === 'png' || format === 'jpeg') {
@@ -259,4 +259,21 @@ function export_image(format) {
     a.click();
 }
 
-//mouse selection
+//Selection/pan buttons
+chart.options.plugins.zoom.pan.enabled = true;
+chart.options.plugins.selectdrag.enabled = false;
+let currentMode = "select";
+const pan = document.getElementById("pan");
+const selection = document.getElementById("selection");
+pan.addEventListener("click", () => {
+    currentMode = "pan";
+    chart.options.plugins.zoom.pan.enabled = true;
+    chart.options.plugins.selectdrag.enabled = false;
+    chart.update();
+});
+selection.addEventListener("click", () => {
+    currentMode = "select";
+    chart.options.plugins.zoom.pan.enabled = false;
+    chart.options.plugins.selectdrag.enabled = true;
+    chart.update();
+});
