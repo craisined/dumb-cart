@@ -220,13 +220,21 @@ const nav_tabs = document.querySelectorAll('.panel-nav-btn');
 nav_tabs.forEach(tab => {
     tab.addEventListener('click', () => {
         const target = document.querySelector(tab.dataset.tabTarget);
-        previous_active_tab = document.querySelector('.panel-nav-btn-selected');
-        previous_active_tab.classList.remove('panel-nav-btn-selected');
-        previous_active_tab_content = document.querySelector('.panel-content-selected');
-        previous_active_tab_content.classList.remove('panel-content-selected');
+        const previous_active_tab = document.querySelector('.panel-nav-btn-selected');
+        const previous_active_tab_content = document.querySelector('.panel-content-selected');
+        if (previous_active_tab) {
+            previous_active_tab.classList.remove('panel-nav-btn-selected');
+        }
+        if (previous_active_tab_content) {
+            previous_active_tab_content.classList.remove('panel-content-selected');
+        }
         tab.classList.add('panel-nav-btn-selected');
-        target.classList.add('panel-content-selected');
-    })
+        if (target) {
+            target.classList.add('panel-content-selected');
+        } else {
+            console.error(`Could not find target element matching selector: ${tab.dataset.tabTarget}`);
+        }
+    });
 });
 
 // Export image
