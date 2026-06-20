@@ -33,7 +33,7 @@ const chart_options = {
             display: false,
         },
         selectdrag: {
-            enabled: true,
+            enabled: false,
             output: 'value',
             onSelectComplete: (event) => {
                 console.log('Selected range:', event.range);
@@ -236,7 +236,7 @@ nav_tabs.forEach(tab => {
     });
 });
 
-//Export image
+// Export image
 document.getElementById('export-trigger').addEventListener('click', () => {
     const format = document.getElementById('export-format').value;
     if (format === 'png' || format === 'jpeg') {
@@ -258,21 +258,21 @@ function export_image(format) {
     a.click();
 }
 
-//Selection/pan buttons
-chart.options.plugins.zoom.pan.enabled = true;
-chart.options.plugins.selectdrag.enabled = false;
-let currentMode = "select";
-const pan = document.getElementById("pan");
-const selection = document.getElementById("selection");
-pan.addEventListener("click", () => {
-    currentMode = "pan";
+// Selection/pan buttons
+let current_mode = "select";
+const pan_btn = document.getElementById("pan-btn");
+const selection_btn = document.getElementById("selection-btn");
+pan_btn.addEventListener("click", () => {
+    current_mode = "pan";
     chart.options.plugins.zoom.pan.enabled = true;
+    chart.options.plugins.zoom.zoom.wheel.enabled = true;
     chart.options.plugins.selectdrag.enabled = false;
     chart.update();
 });
-selection.addEventListener("click", () => {
-    currentMode = "select";
+selection_btn.addEventListener("click", () => {
+    current_mode = "select";
     chart.options.plugins.zoom.pan.enabled = false;
+    chart.options.plugins.zoom.zoom.wheel.enabled = false;
     chart.options.plugins.selectdrag.enabled = true;
     chart.update();
 });

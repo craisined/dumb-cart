@@ -151,12 +151,12 @@ select {
     margin-right: 1rem;
 }
 
-.zoom-controls-container > i {
+.zoom-controls-container > i, .selection-pan-container > i {
     font-size: 2rem;
     margin: 0.4rem;
 }
 
-.zoom-spacer {
+.selection-pan-container{
     flex: 1;
     margin-left: 1rem;
 }

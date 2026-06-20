@@ -15,7 +15,10 @@
 
     <div class="controls-container">
         <!-- Optional TODO: add functionality where the zoom-spacer is -->
-        <div class="zoom-spacer"></div>
+        <div class="selection-pan-container">
+            <i class="bi bi-arrows-move" id="pan-btn"></i>
+            <i class="bi bi-bounding-box-circles" id="selection-btn"></i>
+        </div>
         <i class="bi bi-play-circle-fill" id="start-trial-btn"></i>
         <div class="zoom-controls-container">
             <i class="bi bi-zoom-in" id="zoom-in"></i>
@@ -35,9 +38,6 @@
         </div>
         <div id="selection-panel" class="panel-content" data-tab-content>
             <h1>Selection</h1>
-            //Didn't find good icons for these, so just using text for now
-            <button id="selection">Selection</button>
-            <button id="pan">Pan</button>
         </div>
         <div id="axes-panel" class="panel-content panel-content-selected" data-tab-content>
             <h1>Axes</h1>
