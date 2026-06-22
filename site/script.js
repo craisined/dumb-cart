@@ -33,7 +33,7 @@ const chart_options = {
             display: false,
         },
         selectdrag: {
-            enabled: false,
+            enabled: true,
             output: 'value',
             onSelectComplete: (event) => {
                 console.log('Selected range:', event.range);
@@ -45,12 +45,12 @@ const chart_options = {
         },
         zoom: {
             pan: {
-                enabled: true,
+                enabled: false,
                 mode: 'xy',
             },
             zoom: {
                 wheel: {
-                    enabled: true,
+                    enabled: false,
                 },
                 mode: 'xy',
             }
@@ -259,20 +259,19 @@ function export_image(format) {
 }
 
 // Selection/pan buttons
-let current_mode = "select";
-const pan_btn = document.getElementById("pan-btn");
-const selection_btn = document.getElementById("selection-btn");
-pan_btn.addEventListener("click", () => {
-    current_mode = "pan";
-    chart.options.plugins.zoom.pan.enabled = true;
-    chart.options.plugins.zoom.zoom.wheel.enabled = true;
-    chart.options.plugins.selectdrag.enabled = false;
+let select_mode = true;
+const selection_pan_btn = document.getElementById("selection-pan-btn");
+selection_pan_btn.addEventListener("click", () => {
+    select_mode = !select_mode;
+    chart.options.plugins.zoom.pan.enabled = !select_mode;
+    chart.options.plugins.zoom.zoom.wheel.enabled = !select_mode;
+    chart.options.plugins.selectdrag.enabled = select_mode;
     chart.update();
-});
-selection_btn.addEventListener("click", () => {
-    current_mode = "select";
-    chart.options.plugins.zoom.pan.enabled = false;
-    chart.options.plugins.zoom.zoom.wheel.enabled = false;
-    chart.options.plugins.selectdrag.enabled = true;
-    chart.update();
+    if (select_mode) {
+        selection_pan_btn.classList.remove("bi-bounding-box-circles");
+        selection_pan_btn.classList.add("bi-arrows-move");
+    } else {
+        selection_pan_btn.classList.remove("bi-arrows-move");
+        selection_pan_btn.classList.add("bi-bounding-box-circles");
+    }
 });
