@@ -1,6 +1,3 @@
-import SelectDragPlugin from '@01coder/chartjs-plugin-selectdrag';
-Chart.register(SelectDragPlugin);
-
 // Colors
 const bg_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
 const bg_subtle_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-subtle-color').trim();
@@ -19,6 +16,8 @@ const chart_datasets = {
         },
     ],
 };
+let selection = null;
+let pre_drag_limits = null;
 const chart_options = {
     animation: false,
     maintainAspectRatio: false,
@@ -52,8 +51,31 @@ const chart_options = {
                 wheel: {
                     enabled: false,
                 },
-                mode: 'xy',
-            }
+                drag: {
+                    enabled: true,
+                    threshold: 1,
+                },
+                mode: 'x',
+                onZoomStart({ chart, event }) {
+                    pre_drag_limits = {
+                        min: chart.scales.x.min,
+                        max: chart.scales.x.max,
+                    };
+                    return true;
+                },
+                onZoomComplete({chart}) {
+                    if (pre_drag_limits === null){
+                        return null;
+                    }
+                    selection = {
+                        min: chart.scales.x.min,
+                        max: chart.scales.x.max,
+                    };
+                    console.log(selection);
+                    chart.zoomScale('x', { min: pre_drag_limits.min, max: pre_drag_limits.max });
+                    pre_drag_limits = null;
+                }
+            },
         }
     },
     responsive: true,
@@ -265,7 +287,8 @@ selection_pan_btn.addEventListener("click", () => {
     select_mode = !select_mode;
     chart.options.plugins.zoom.pan.enabled = !select_mode;
     chart.options.plugins.zoom.zoom.wheel.enabled = !select_mode;
-    chart.options.plugins.selectdrag.enabled = select_mode;
+    chart.options.plugins.zoom.zoom.drag.enabled = select_mode;
+    chart.options.plugins.zoom.zoom.mode = select_mode ? 'x' : 'xy';
     chart.update();
     if (select_mode) {
         selection_pan_btn.classList.remove("bi-bounding-box-circles");
