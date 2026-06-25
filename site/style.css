@@ -25,7 +25,7 @@ body {
     line-height: 1.4;
 }
 
-button {
+button, input[type="file"]::file-selector-button {
     background-color: var(--highlight);
     border-style: hidden;
     border-radius: 0.5rem;
@@ -63,6 +63,11 @@ input[type="input"] {
     outline: none;
 }
 
+input[type="file"] {
+    color: var(--fg-color);
+    font-family: "Quicksand", sans-serif;
+}
+
 input[type="checkbox"], input[type="radio"] {
     accent-color: var(--highlight);
 }
@@ -77,6 +82,25 @@ select {
     display: block;
     margin-bottom: 0.4rem;
     width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-style: hidden;
+    font-size: 0.75rem;
+}
+
+th, td {
+    padding: 0.25rem;
+    text-align: left;
+}
+th {
+    border: 2px solid var(--fg-color);
+}
+
+td {
+    border: 1px solid var(--fg-color);
 }
 
 .chart-container {

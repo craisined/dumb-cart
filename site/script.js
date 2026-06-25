@@ -1,3 +1,15 @@
+import { Chart, LineController, LineElement, PointElement, LinearScale } from 'https://cdn.jsdelivr.net/npm/chart.js@4.5.1/+esm';
+import chartjsPluginZoom from 'https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/+esm'
+import { parse, stringify } from 'https://cdn.jsdelivr.net/npm/@vanillaes/csv@4.1.3/+esm'
+
+Chart.register(
+    LineController,
+    LineElement,
+    PointElement,
+    LinearScale,
+    chartjsPluginZoom
+);
+
 // Colors
 const bg_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
 const bg_subtle_color = getComputedStyle(document.documentElement).getPropertyValue('--bg-subtle-color').trim();
@@ -30,36 +42,39 @@ const highlight = {
 // Initialize chart
 const chart_canvas = document.getElementById('chart');
 Chart.defaults.font.family = "'Quicksand', sans-serif";
-Chart.defaults.color = fg_color; 
+Chart.defaults.color = fg_color;
+Chart.defaults.datasets.line = {
+    ...Chart.defaults.datasets.line,
+    segment: {
+        borderColor(ctx) {
+            if (selection === null) {
+                return blue;
+            }
+            return (selection.min <= ctx.p0.raw.x && ctx.p1.raw.x <= selection.max) ? fg_color : blue;
+        }
+    },
+    pointBorderWidth: 0,
+    pointRadius(ctx) {
+        if (selection === null) {
+            return 4;
+        }
+        return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? 5 : 4;
+    },
+    pointBackgroundColor(ctx) {
+        if (selection === null) {
+            return blue;
+        }
+        return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? fg_color : blue;
+    },
+    hoverBackgroundColor: fg_color,
+    hoverRadius: 6,
+    hoverBorderWidth: 0,
+}
 const chart_datasets = {
     datasets: [
         {
             label: 'Force',
-            data: [{x:1,y:1}, {x:2,y: 0.5}, {x: 2.5, y: 1}],
-            segment: {
-                borderColor(ctx){
-                    if (selection === null){
-                        return blue;
-                    }
-                    return (selection.min <= ctx.p0.raw.x && ctx.p1.raw.x <= selection.max) ? fg_color : blue;
-                }
-            },
-            pointBorderWidth: 0,
-            pointRadius(ctx){
-                if (selection === null){
-                    return 4;
-                }
-                return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? 5 : 4;
-            },
-            pointBackgroundColor(ctx){
-                if (selection === null){
-                    return blue;
-                }
-                return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? fg_color : blue;
-            },
-            hoverBackgroundColor: fg_color,
-            hoverRadius: 6,
-            hoverBorderWidth: 0,
+            data: [{ x: 1, y: 1 }, { x: 2, y: 0.5 }, { x: 2.5, y: 1 }],
         },
     ],
 };
@@ -102,8 +117,8 @@ const chart_options = {
                     };
                     return true;
                 },
-                onZoomComplete({chart}) {
-                    if (pre_drag_limits === null){
+                onZoomComplete({ chart }) {
+                    if (pre_drag_limits === null) {
                         return null;
                     }
                     selection = {
@@ -140,15 +155,15 @@ let chart = new Chart(chart_canvas, {
 
 //zoom buttons
 document.getElementById('zoom-in').addEventListener('click', () => {
-    chart.zoom(1.1); 
+    chart.zoom(1.1);
 });
 
 document.getElementById('zoom-out').addEventListener('click', () => {
-    chart.zoom(0.9); 
+    chart.zoom(0.9);
 });
 
 document.getElementById('zoom-reset').addEventListener('click', () => {
-    chart.resetZoom(); 
+    chart.resetZoom();
 });
 
 // Bluetooth
@@ -162,7 +177,7 @@ let ble_sensor_characteristic;
 
 let sensor_data;
 
-function handle_characteristic_change(event){
+function handle_characteristic_change(event) {
     let buffer = event.target.value.buffer;
     let sensor_dataview = new DataView(buffer);
     let offset = 0;
@@ -175,8 +190,8 @@ function handle_characteristic_change(event){
     update_trial();
 }
 
-async function connect_cart(event){
-    if (!navigator.bluetooth){
+async function connect_cart(event) {
+    if (!navigator.bluetooth) {
         alert("Web Bluetooth not enabled! Try a Chromium based browser (sorry).");
         return null;
     }
@@ -191,8 +206,8 @@ async function connect_cart(event){
     console.log("Connected! Device: ", ble_device.name);
 }
 
-async function disconnect_cart(event){
-    if (!ble_device || !ble_device.gatt.connected){
+async function disconnect_cart(event) {
+    if (!ble_device || !ble_device.gatt.connected) {
         console.log("Already disconnected!");
     }
     ble_device.gatt.disconnect();
@@ -207,11 +222,11 @@ disconnect_btn.addEventListener("click", disconnect_cart);
 let trials = [];
 let active_trial;
 
-function toggle_trial(event){
+function toggle_trial(event) {
     if (!sensor_data || !ble_device) {
         return null;
     }
-    if (!active_trial){
+    if (!active_trial) {
         active_trial = {
             start_time: sensor_data.time,
             time: [],
@@ -230,7 +245,7 @@ function toggle_trial(event){
     }
 }
 
-function update_trial(){
+function update_trial() {
     if (!active_trial) {
         return null;
     }
@@ -248,12 +263,12 @@ start_trial_btn.addEventListener("click", toggle_trial);
 
 // TODO: x-axis stuff
 // Dataset Generation
-function get_selected_datasets(trial){
+function get_selected_datasets(trial) {
     const checkboxes = document.querySelectorAll('input[name="y-axis"]:checked');
     const selected_vals = Array.from(checkboxes).map(checkbox => checkbox.value);
     const datasets = selected_vals.map(attribute => ({
         label: attribute,
-        data: trial.time.map((time, index) => ({x: time, y: trial[attribute][index]})),
+        data: trial.time.map((time, index) => ({ x: time, y: trial[attribute][index] })),
     }));
     chart.update()
     return datasets;
@@ -261,7 +276,7 @@ function get_selected_datasets(trial){
 
 // Trial section fuckery
 let trial_number = 0;
-function add_trial(){
+function add_trial() {
     trials.push(active_trial);
     const trials_panel = document.getElementById("trials-panel");
     trials_panel.insertAdjacentHTML("beforeend", `

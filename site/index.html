@@ -36,6 +36,30 @@
         </div>
         <div id="selection-panel" class="panel-content" data-tab-content>
             <h1>Selection</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Trial</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                        <th>Mean</th>
+                        <th>Median</th>
+                        <th>σ</th>
+                        <th>Area</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div id="axes-panel" class="panel-content panel-content-selected" data-tab-content>
             <h1>Axes</h1>
@@ -76,14 +100,13 @@
                 <option value="json">JSON</option>
             </select>
             <button type="button" id="export-trigger">Export</button>
+            <h1>Import</h1>
+            <input type="file" accept=".csv">
         </div>
     </div>
     
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/dist/chartjs-plugin-zoom.min.js"></script>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 
 </html>
