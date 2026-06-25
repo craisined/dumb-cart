@@ -4,6 +4,29 @@ const bg_subtle_color = getComputedStyle(document.documentElement).getPropertyVa
 const fg_color = getComputedStyle(document.documentElement).getPropertyValue('--fg-color').trim();
 const highlight_color = getComputedStyle(document.documentElement).getPropertyValue('--highlight').trim();
 
+const red = "#cd8275";
+const green = "#70a97b";
+const yellow = "#ac975c";
+const blue = "#8396d1";
+const purple = "#bf7fb9";
+const cyan = "#5ea5b2";
+
+const red_highlight = "#dc9b90";
+const green_highlight = "#84bf90";
+const yellow_highlight = "#c3ac70";
+const blue_highlight = "#9cacdd";
+const purple_highlight = "#d099ca";
+const cyan_highlight = "#73bbc8";
+
+const highlight = {
+    red: red_highlight,
+    green: green_highlight,
+    yellow: yellow_highlight,
+    blue: blue_highlight,
+    purple: purple_highlight,
+    cyan: cyan_highlight,
+}
+
 // Initialize chart
 const chart_canvas = document.getElementById('chart');
 Chart.defaults.font.family = "'Quicksand', sans-serif";
@@ -12,7 +35,31 @@ const chart_datasets = {
     datasets: [
         {
             label: 'Force',
-            data: [{x:1,y:1}]
+            data: [{x:1,y:1}, {x:2,y: 0.5}, {x: 2.5, y: 1}],
+            segment: {
+                borderColor(ctx){
+                    if (selection === null){
+                        return blue;
+                    }
+                    return (selection.min <= ctx.p0.raw.x && ctx.p1.raw.x <= selection.max) ? fg_color : blue;
+                }
+            },
+            pointBorderWidth: 0,
+            pointRadius(ctx){
+                if (selection === null){
+                    return 4;
+                }
+                return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? 5 : 4;
+            },
+            pointBackgroundColor(ctx){
+                if (selection === null){
+                    return blue;
+                }
+                return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? fg_color : blue;
+            },
+            hoverBackgroundColor: fg_color,
+            hoverRadius: 6,
+            hoverBorderWidth: 0,
         },
     ],
 };
@@ -31,17 +78,6 @@ const chart_options = {
         title: {
             display: false,
         },
-        selectdrag: {
-            enabled: true,
-            output: 'value',
-            onSelectComplete: (event) => {
-                console.log('Selected range:', event.range);
-                console.log('Selection bounding box:', event.boundingBox);
-            },
-            colors: {
-                selection: bg_subtle_color + "4D",
-            },
-        },
         zoom: {
             pan: {
                 enabled: false,
@@ -57,6 +93,9 @@ const chart_options = {
                 },
                 mode: 'x',
                 onZoomStart({ chart, event }) {
+                    if (!select_mode) {
+                        return null;
+                    }
                     pre_drag_limits = {
                         min: chart.scales.x.min,
                         max: chart.scales.x.max,
@@ -71,7 +110,6 @@ const chart_options = {
                         min: chart.scales.x.min,
                         max: chart.scales.x.max,
                     };
-                    console.log(selection);
                     chart.zoomScale('x', { min: pre_drag_limits.min, max: pre_drag_limits.max });
                     pre_drag_limits = null;
                 }
