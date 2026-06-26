@@ -21,3 +21,8 @@
     - Conenct website to BLE ✅
 - Connect website controls to chart
 - Final revision
+
+- Trials
+- Selection
+- Import/export csv
+- Multi cart support

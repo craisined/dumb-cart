@@ -16,6 +16,7 @@ const bg_subtle_color = getComputedStyle(document.documentElement).getPropertyVa
 const fg_color = getComputedStyle(document.documentElement).getPropertyValue('--fg-color').trim();
 const highlight_color = getComputedStyle(document.documentElement).getPropertyValue('--highlight').trim();
 
+// TODO: Link to CSS
 const red = "#cd8275";
 const green = "#70a97b";
 const yellow = "#ac975c";
@@ -41,76 +42,57 @@ const highlight = {
 
 // Initialize chart
 const chart_canvas = document.getElementById('chart');
-Chart.defaults.font.family = "'Quicksand', sans-serif";
 Chart.defaults.color = fg_color;
+function color_point(ctx) {
+    if (selection === null) { return blue; }
+    return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? fg_color : blue;
+}
+function color_line(ctx) {
+    if (selection === null) { return blue; }
+    return (selection.min <= ctx.p0.raw.x && ctx.p1.raw.x <= selection.max) ? fg_color : blue;
+}
+function size_point(ctx) {
+    if (selection === null) { return 4; }
+    return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? 5 : 4;
+}
 Chart.defaults.datasets.line = {
     ...Chart.defaults.datasets.line,
-    segment: {
-        borderColor(ctx) {
-            if (selection === null) {
-                return blue;
-            }
-            return (selection.min <= ctx.p0.raw.x && ctx.p1.raw.x <= selection.max) ? fg_color : blue;
-        }
-    },
+    segment: { borderColor: color_line },
     pointBorderWidth: 0,
-    pointRadius(ctx) {
-        if (selection === null) {
-            return 4;
-        }
-        return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? 5 : 4;
-    },
-    pointBackgroundColor(ctx) {
-        if (selection === null) {
-            return blue;
-        }
-        return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? fg_color : blue;
-    },
+    pointRadius: size_point,
+    pointBackgroundColor: color_point,
     hoverBackgroundColor: fg_color,
     hoverRadius: 6,
     hoverBorderWidth: 0,
 }
-const chart_datasets = {
-    datasets: [
-        {
-            label: 'Force',
-            data: [{ x: 1, y: 1 }, { x: 2, y: 0.5 }, { x: 2.5, y: 1 }],
-        },
-    ],
+Chart.defaults.font.family = "'Quicksand', sans-serif";
+Chart.defaults.scales.linear = {
+    ...Chart.defaults.scales.linear,
+    beginAtZero: true,
+    border: { color: fg_color },
+    grid: { color: bg_subtle_color },
 };
+
 let selection = null;
 let pre_drag_limits = null;
 const chart_options = {
     animation: false,
+    layout: { padding: 16 },
     maintainAspectRatio: false,
-    layout: {
-        padding: 16,
-    },
     plugins: {
-        legend: {
-            display: false,
-        },
-        title: {
-            display: false,
-        },
+        legend: { display: false },
+        title: { display: false },
         zoom: {
             pan: {
                 enabled: false,
                 mode: 'xy',
             },
             zoom: {
-                wheel: {
-                    enabled: false,
-                },
-                drag: {
-                    enabled: true,
-                    threshold: 1,
-                },
+                wheel: { enabled: false },
+                drag: { enabled: true },
                 mode: 'x',
                 onZoomStart({ chart, event }) {
-                    if (!select_mode) {
-                        return null;
-                    }
+                    if (!select_mode) { return null; }
                     pre_drag_limits = {
                         min: chart.scales.x.min,
                         max: chart.scales.x.max,
@@ -118,9 +100,7 @@ const chart_options = {
                     return true;
                 },
                 onZoomComplete({ chart }) {
-                    if (pre_drag_limits === null) {
-                        return null;
-                    }
+                    if (!pre_drag_limits) { return null; }
                     selection = {
                         min: chart.scales.x.min,
                         max: chart.scales.x.max,
@@ -133,33 +113,26 @@ const chart_options = {
     },
     responsive: true,
     scales: {
-        x: {
-            beginAtZero: true,
-            border: { color: fg_color },
-            grid: { color: bg_subtle_color },
-            type: 'linear',
-        },
-        y: {
-            beginAtZero: true,
-            border: { color: fg_color },
-            grid: { color: bg_subtle_color },
-            type: 'linear',
-        }
+        x: { type: 'linear' },
+        y: { type: 'linear' }
     },
 };
 let chart = new Chart(chart_canvas, {
     type: "line",
-    data: chart_datasets,
     options: chart_options
 })
 
 //zoom buttons
 document.getElementById('zoom-in').addEventListener('click', () => {
+    chart.options.plugins.zoom.zoom.mode = 'xy';
     chart.zoom(1.1);
+    chart.options.plugins.zoom.zoom.mode = select_mode ? 'x' : 'xy';
 });
 
 document.getElementById('zoom-out').addEventListener('click', () => {
+    chart.options.plugins.zoom.zoom.mode = 'xy';
     chart.zoom(0.9);
+    chart.options.plugins.zoom.zoom.mode = select_mode ? 'x' : 'xy';
 });
 
 document.getElementById('zoom-reset').addEventListener('click', () => {
@@ -218,44 +191,40 @@ const disconnect_btn = document.getElementById("disconnect-btn");
 connect_btn.addEventListener("click", connect_cart);
 disconnect_btn.addEventListener("click", disconnect_cart);
 
-// Trial
+// Active trial
 let trials = [];
 let active_trial;
+let start_time;
 
 function toggle_trial(event) {
-    if (!sensor_data || !ble_device) {
-        return null;
-    }
+    if (!sensor_data || !ble_device) { return null; }
     if (!active_trial) {
         active_trial = {
-            start_time: sensor_data.time,
             time: [],
             acceleration: [],
             force: [],
             encoder: [],
         };
+        start_time = sensor_data.time;
         update_trial();
-        start_trial_btn.classList.remove("bi-play-circle-fill");
-        start_trial_btn.classList.add("bi-pause-circle-fill");
     } else {
         add_trial();
         active_trial = null;
-        start_trial_btn.classList.remove("bi-pause-circle-fill");
-        start_trial_btn.classList.add("bi-play-circle-fill");
     }
+    start_trial_btn.classList.remove(active_trial ? "bi-play-circle-fill" : "bi-pause-circle-fill");
+    start_trial_btn.classList.add(active_trial ? "bi-pause-circle-fill" : "bi-play-circle-fill");
 }
 
 function update_trial() {
-    if (!active_trial) {
-        return null;
-    }
+    if (!active_trial) { return null; }
     let data = structuredClone(sensor_data);
-    data.time = (data.time - active_trial.start_time) / 1000;
+    data.time = (data.time - start_time) / 1000;
     ["time", "acceleration", "force", "encoder"].forEach(attribute => {
         active_trial[attribute].push(data[attribute]);
     });
-    console.log(get_selected_datasets(active_trial));
     chart.data.datasets = get_selected_datasets(active_trial);
+    console.log(get_selected_datasets(active_trial));
+    chart.update();
 }
 
 const start_trial_btn = document.getElementById("start-trial-btn");
@@ -270,10 +239,10 @@ function get_selected_datasets(trial) {
         label: attribute,
         data: trial.time.map((time, index) => ({ x: time, y: trial[attribute][index] })),
     }));
-    chart.update()
     return datasets;
 }
 
+/// TODO: Good practices
 // Trial section fuckery
 let trial_number = 0;
 function add_trial() {
@@ -286,37 +255,26 @@ function add_trial() {
     </div>
     `);
     trial_number++;
-
 }
 
 // Tab switching
 const nav_tabs = document.querySelectorAll('.panel-nav-btn');
 nav_tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-        const target = document.querySelector(tab.dataset.tabTarget);
-        const previous_active_tab = document.querySelector('.panel-nav-btn-selected');
         const previous_active_tab_content = document.querySelector('.panel-content-selected');
-        if (previous_active_tab) {
-            previous_active_tab.classList.remove('panel-nav-btn-selected');
-        }
-        if (previous_active_tab_content) {
-            previous_active_tab_content.classList.remove('panel-content-selected');
-        }
+        const previous_active_tab = document.querySelector('.panel-nav-btn-selected');
+        const target = document.querySelector(tab.dataset.tabTarget);
+        previous_active_tab_content.classList.remove('panel-content-selected');
+        previous_active_tab.classList.remove('panel-nav-btn-selected');
+        target.classList.add('panel-content-selected');
         tab.classList.add('panel-nav-btn-selected');
-        if (target) {
-            target.classList.add('panel-content-selected');
-        } else {
-            console.error(`Could not find target element matching selector: ${tab.dataset.tabTarget}`);
-        }
     });
 });
 
 // Export image
-document.getElementById('export-trigger').addEventListener('click', () => {
+document.getElementById('export-btn').addEventListener('click', () => {
     const format = document.getElementById('export-format').value;
-    if (format === 'png' || format === 'jpeg') {
-        export_image(format);
-    }
+    if (format === 'png' || format === 'jpeg') { export_image(format); }
 });
 
 function export_image(format) {
@@ -338,16 +296,11 @@ let select_mode = true;
 const selection_pan_btn = document.getElementById("selection-pan-btn");
 selection_pan_btn.addEventListener("click", () => {
     select_mode = !select_mode;
+    selection_pan_btn.classList.remove(select_mode ? "bi-bounding-box-circles" : "bi-arrows-move");
+    selection_pan_btn.classList.add(select_mode ? "bi-arrows-move" : "bi-bounding-box-circles");
     chart.options.plugins.zoom.pan.enabled = !select_mode;
     chart.options.plugins.zoom.zoom.wheel.enabled = !select_mode;
     chart.options.plugins.zoom.zoom.drag.enabled = select_mode;
     chart.options.plugins.zoom.zoom.mode = select_mode ? 'x' : 'xy';
     chart.update();
-    if (select_mode) {
-        selection_pan_btn.classList.remove("bi-bounding-box-circles");
-        selection_pan_btn.classList.add("bi-arrows-move");
-    } else {
-        selection_pan_btn.classList.remove("bi-arrows-move");
-        selection_pan_btn.classList.add("bi-bounding-box-circles");
-    }
 });
