@@ -55,6 +55,23 @@ function size_point(ctx) {
     if (selection === null) { return 4; }
     return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? 5 : 4;
 }
+function zoom_start({ chart, event }) {
+    if (!select_mode) { return null; }
+    pre_drag_limits = {
+        min: chart.scales.x.min,
+        max: chart.scales.x.max,
+    };
+    return true;
+}
+function zoom_complete({ chart }) {
+    if (!pre_drag_limits) { return null; }
+    selection = {
+        min: chart.scales.x.min,
+        max: chart.scales.x.max,
+    };
+    chart.zoomScale('x', { min: pre_drag_limits.min, max: pre_drag_limits.max });
+    pre_drag_limits = null;
+}
 Chart.defaults.datasets.line = {
     ...Chart.defaults.datasets.line,
     segment: { borderColor: color_line },
@@ -91,23 +108,8 @@ const chart_options = {
                 wheel: { enabled: false },
                 drag: { enabled: true },
                 mode: 'x',
-                onZoomStart({ chart, event }) {
-                    if (!select_mode) { return null; }
-                    pre_drag_limits = {
-                        min: chart.scales.x.min,
-                        max: chart.scales.x.max,
-                    };
-                    return true;
-                },
-                onZoomComplete({ chart }) {
-                    if (!pre_drag_limits) { return null; }
-                    selection = {
-                        min: chart.scales.x.min,
-                        max: chart.scales.x.max,
-                    };
-                    chart.zoomScale('x', { min: pre_drag_limits.min, max: pre_drag_limits.max });
-                    pre_drag_limits = null;
-                }
+                onZoomStart: zoom_start,
+                onZoomComplete: zoom_complete,
             },
         }
     },
@@ -122,7 +124,7 @@ let chart = new Chart(chart_canvas, {
     options: chart_options
 })
 
-//zoom buttons
+// Zoom buttons
 document.getElementById('zoom-in').addEventListener('click', () => {
     chart.options.plugins.zoom.zoom.mode = 'xy';
     chart.zoom(1.1);
@@ -191,8 +193,46 @@ const disconnect_btn = document.getElementById("disconnect-btn");
 connect_btn.addEventListener("click", connect_cart);
 disconnect_btn.addEventListener("click", disconnect_cart);
 
+// TODO: x-axis stuff
+// Trials
+let trials = {};
+let visible_trials = [];
+
+function get_visible_trials() {
+    const checkboxes = document.querySelectorAll('input[name="trials"]:checked');
+    const trial_indexes = Array.from(checkboxes).map(checkbox => checkbox.value);
+    const visible_trials = trial_indexes.map(index => trials[parseInt(index)]);
+    return visible_trials;
+}
+
+function get_selected_datasets(trials) {
+    const checkboxes = document.querySelectorAll('input[name="y-axis"]:checked');
+    const attributes = Array.from(checkboxes).map(checkbox => checkbox.value);
+    let datasets = [];
+    trials.forEach(trial => {
+        const x = 'time';
+        attributes.forEach(attribute => {
+            datasets.push({
+                label: attribute,
+                data: trial[x].map((value, index) => ({x: value, y: trial[attribute][index]})),
+            });
+        });
+    });
+    return datasets;
+}
+
+
+function update_selected_trials() {
+    if (!active_trial) {
+        chart.data.datasets = get_selected_datasets(get_visible_trials());
+        chart.update();
+    }
+}
+document.querySelectorAll('input[name="y-axis"]').forEach(checkbox => {
+    checkbox.addEventListener('change', update_selected_trials);
+});
+
 // Active trial
-let trials = [];
 let active_trial;
 let start_time;
 
@@ -208,7 +248,7 @@ function toggle_trial(event) {
         start_time = sensor_data.time;
         update_trial();
     } else {
-        add_trial();
+        end_trial();
         active_trial = null;
     }
     start_trial_btn.classList.remove(active_trial ? "bi-play-circle-fill" : "bi-pause-circle-fill");
@@ -217,44 +257,36 @@ function toggle_trial(event) {
 
 function update_trial() {
     if (!active_trial) { return null; }
-    let data = structuredClone(sensor_data);
-    data.time = (data.time - start_time) / 1000;
-    ["time", "acceleration", "force", "encoder"].forEach(attribute => {
-        active_trial[attribute].push(data[attribute]);
+    let data = {
+        time: (sensor_data.time - start_time) / 1000,
+        acceleration: sensor_data.acceleration,
+        force: sensor_data.force,
+        encoder: sensor_data.encoder,
+    };
+    Object.entries(data).forEach(([attribute, value]) => {
+        active_trial[attribute].push(value);
     });
-    chart.data.datasets = get_selected_datasets(active_trial);
-    console.log(get_selected_datasets(active_trial));
+    chart.data.datasets = get_selected_datasets([active_trial]);
     chart.update();
 }
 
 const start_trial_btn = document.getElementById("start-trial-btn");
 start_trial_btn.addEventListener("click", toggle_trial);
 
-// TODO: x-axis stuff
-// Dataset Generation
-function get_selected_datasets(trial) {
-    const checkboxes = document.querySelectorAll('input[name="y-axis"]:checked');
-    const selected_vals = Array.from(checkboxes).map(checkbox => checkbox.value);
-    const datasets = selected_vals.map(attribute => ({
-        label: attribute,
-        data: trial.time.map((time, index) => ({ x: time, y: trial[attribute][index] })),
-    }));
-    return datasets;
-}
-
 /// TODO: Good practices
-// Trial section fuckery
 let trial_number = 0;
-function add_trial() {
-    trials.push(active_trial);
+function end_trial() {
+    trials[trial_number] = active_trial;
     const trials_panel = document.getElementById("trials-panel");
     trials_panel.insertAdjacentHTML("beforeend", `
-    <div>
-        <h3>Trial ${trial_number}<span class="trial-btns"><input type="checkbox" name="trial" value=${trials_panel} checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
-        <label>Cart Mass: <input type="input" name="mass-${trial_number}"> kg</label>
-    </div>
-    `);
+<div>
+    <h3>Trial ${trial_number}<span class="trial-btns"><input type="checkbox" name="trials" value=${trial_number} checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
+    <label>Cart Mass: <input type="input" name="mass-${trial_number}"> kg</label>
+</div>`);
+    document.querySelector(`input[name="trials"][value="${trial_number}"]`).addEventListener('change', update_selected_trials);
     trial_number++;
+    chart.data.datasets = get_selected_datasets(get_visible_trials());
+    chart.update();
 }
 
 // Tab switching
