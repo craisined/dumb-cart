@@ -273,7 +273,6 @@ function update_trial() {
 const start_trial_btn = document.getElementById("start-trial-btn");
 start_trial_btn.addEventListener("click", toggle_trial);
 
-/// TODO: Good practices
 let trial_number = 0;
 function end_trial() {
     trials[trial_number] = active_trial;
