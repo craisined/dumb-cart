@@ -244,6 +244,7 @@ function toggle_trial(event) {
             acceleration: [],
             force: [],
             encoder: [],
+            name: `Trial ${trial_number}`
         };
         start_time = sensor_data.time;
         update_trial();
@@ -273,16 +274,76 @@ function update_trial() {
 const start_trial_btn = document.getElementById("start-trial-btn");
 start_trial_btn.addEventListener("click", toggle_trial);
 
-let trial_number = 0;
+let trial_number = 1;
+
+function remove_trial(trial_number){
+    function on_click(){
+        delete trials[trial_number];
+        document.getElementById(`trial-${trial_number}-container`).remove();
+        update_selected_trials();
+    }
+    return on_click;
+}
+
+function rename_trial(trial_number){
+    function on_click(){
+        const new_name = prompt(`Rename ${trials[trial_number].name}:`);
+        trials[trial_number].name = new_name;
+        document.getElementById(`trial-${trial_number}-header`).innerText = new_name;
+    }
+    return on_click;
+}
+
+function create_trial_html(trial_number){
+    const container_div = document.createElement('div');
+    container_div.id = `trial-${trial_number}-container`;
+    const header_h3 = document.createElement('h3');
+    const header_span = document.createElement('span');
+    header_span.id = `trial-${trial_number}-header`;
+    header_span.textContent = trials[trial_number].name;
+    const btn_span = document.createElement('span');
+    btn_span.className = 'trial-btns';
+    const checkbox_input = document.createElement('input');
+    checkbox_input.type = 'checkbox';
+    checkbox_input.name = 'trials';
+    checkbox_input.value = trial_number;
+    checkbox_input.checked = true;
+    checkbox_input.addEventListener('change', update_selected_trials);
+    const edit_icon = document.createElement('i');
+    edit_icon.className = 'bi bi-pencil-square';
+    edit_icon.id = `rename-trial-${trial_number}`;
+    function edit_icon_event(){
+        const new_name = prompt(`Rename ${trials[trial_number].name}:`);
+        trials[trial_number].name = new_name;
+        document.getElementById(`trial-${trial_number}-header`).innerText = new_name;
+    }
+    edit_icon.addEventListener('click', edit_icon_event);
+    const delete_icon = document.createElement('i');
+    delete_icon.className = 'bi bi-x-lg';
+    delete_icon.id = `delete-trial-${trial_number}`;
+    function delete_icon_event(){
+        delete trials[trial_number];
+        document.getElementById(`trial-${trial_number}-container`).remove();
+        update_selected_trials();
+    }
+    delete_icon.addEventListener('click', delete_icon_event);
+    const mass_label = document.createElement('label');
+    mass_label.textContent = 'Cart Mass: ';
+    const mass_input = document.createElement('input');
+    mass_input.type = 'input'; 
+    mass_input.name = `mass-${trial_number}`;
+    const kg_text = document.createTextNode(' kg');
+    btn_span.append(checkbox_input, edit_icon, delete_icon);
+    header_h3.append(header_span, btn_span);
+    mass_label.append(mass_input, kg_text);
+    container_div.append(header_h3, mass_label);
+    return container_div;
+}
+
 function end_trial() {
     trials[trial_number] = active_trial;
-    const trials_panel = document.getElementById("trials-panel");
-    trials_panel.insertAdjacentHTML("beforeend", `
-<div>
-    <h3>Trial ${trial_number}<span class="trial-btns"><input type="checkbox" name="trials" value=${trial_number} checked><i class="bi bi-x-lg"></i><i class="bi bi-pencil-square"></i></span></h3>
-    <label>Cart Mass: <input type="input" name="mass-${trial_number}"> kg</label>
-</div>`);
-    document.querySelector(`input[name="trials"][value="${trial_number}"]`).addEventListener('change', update_selected_trials);
+    const trials_section = document.getElementById("trials-section");
+    trials_section.prepend(create_trial_html(trial_number));
     trial_number++;
     chart.data.datasets = get_selected_datasets(get_visible_trials());
     chart.update();
