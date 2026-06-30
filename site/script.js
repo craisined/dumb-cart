@@ -246,6 +246,7 @@ document.querySelectorAll('input[name="x-axis"], input[name="y-axis"]').forEach(
 // Active trial
 let active_trial;
 let start_time;
+let start_encoder;
 
 function toggle_trial(event) {
     if (!sensor_data || !ble_device) { return null; }
@@ -258,6 +259,7 @@ function toggle_trial(event) {
             name: `Trial ${trial_number}`
         };
         start_time = sensor_data.time;
+        start_encoder = sensor_data.encoder;
         update_trial();
     } else {
         end_trial();
@@ -273,7 +275,7 @@ function update_trial() {
         time: (sensor_data.time - start_time) / 1000,
         acceleration: sensor_data.acceleration,
         force: sensor_data.force,
-        encoder: sensor_data.encoder,
+        encoder: sensor_data.encoder - start_encoder,
     };
     Object.entries(data).forEach(([attribute, value]) => {
         active_trial[attribute].push(value);
