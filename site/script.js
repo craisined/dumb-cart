@@ -18,39 +18,35 @@ const fg_color = getComputedStyle(document.documentElement).getPropertyValue('--
 const highlight_color = getComputedStyle(document.documentElement).getPropertyValue('--highlight').trim();
 
 // TODO: Link to CSS
-const red = "#cd8275";
-const green = "#70a97b";
-const yellow = "#ac975c";
-const blue = "#8396d1";
-const purple = "#bf7fb9";
-const cyan = "#5ea5b2";
+const colors = {
+    red: "#cd8275",
+    green:"#70a97b",
+    yellow:"#ac975c",
+    blue: "#8396d1",
+    purple: "#bf7fb9",
+    cyan: "#5ea5b2",
+}
 
-const red_highlight = "#dc9b90";
-const green_highlight = "#84bf90";
-const yellow_highlight = "#c3ac70";
-const blue_highlight = "#9cacdd";
-const purple_highlight = "#d099ca";
-const cyan_highlight = "#73bbc8";
-
-const highlight = {
-    red: red_highlight,
-    green: green_highlight,
-    yellow: yellow_highlight,
-    blue: blue_highlight,
-    purple: purple_highlight,
-    cyan: cyan_highlight,
+const dataset_color = {
+    "acceleration": colors.red,
+    "force": colors.green,
+    "encoder": colors.blue,
 }
 
 // Initialize chart
 const chart_canvas = document.getElementById('chart');
 Chart.defaults.color = fg_color;
 function color_point(ctx) {
-    if (selection === null) { return blue; }
-    return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? fg_color : blue;
+    const dataset = ctx.chart.data.datasets[ctx.datasetIndex];
+    const color = dataset_color[dataset.label];
+    if (selection === null) { return color; }
+    return (selection.min <= ctx.raw.x && ctx.raw.x <= selection.max) ? fg_color : color;
 }
 function color_line(ctx) {
-    if (selection === null) { return blue; }
-    return (selection.min <= ctx.p0.raw.x && ctx.p1.raw.x <= selection.max) ? fg_color : blue;
+    const dataset = ctx.chart.data.datasets[ctx.datasetIndex];
+    const color = dataset_color[dataset.label];
+    if (selection === null) { return color; }
+    return (selection.min <= ctx.p0.raw.x && ctx.p1.raw.x <= selection.max) ? fg_color : color;
 }
 function size_point(ctx) {
     if (selection === null) { return 4; }
@@ -76,9 +72,9 @@ function zoom_complete({ chart }) {
 Chart.defaults.datasets.line = {
     ...Chart.defaults.datasets.line,
     segment: { borderColor: color_line },
+    pointBackgroundColor: color_point,
     pointBorderWidth: 0,
     pointRadius: size_point,
-    pointBackgroundColor: color_point,
     hoverBackgroundColor: fg_color,
     hoverRadius: 6,
     hoverBorderWidth: 0,
