@@ -226,6 +226,7 @@ function get_selected_datasets(trials) {
             datasets.push({
                 label: attribute,
                 data: trial[get_x()].map((value, index) => ({x: value, y: trial[attribute][index]})),
+                pointStyle: trial.shape,
             });
         });
     });
@@ -247,6 +248,9 @@ document.querySelectorAll('input[name="x-axis"], input[name="y-axis"]').forEach(
 let active_trial;
 let start_time;
 let start_encoder;
+let trial_number = 0;
+
+const trial_shapes = ['circle', 'rect', 'triangle', 'rectRounded'];
 
 function toggle_trial(event) {
     if (!sensor_data || !ble_device) { return null; }
@@ -256,7 +260,8 @@ function toggle_trial(event) {
             acceleration: [],
             force: [],
             encoder: [],
-            name: `Trial ${trial_number}`
+            name: `Trial ${trial_number + 1}`,
+            shape: trial_shapes[trial_number % trial_shapes.length],
         };
         start_time = sensor_data.time;
         start_encoder = sensor_data.encoder;
@@ -286,8 +291,6 @@ function update_trial() {
 
 const start_trial_btn = document.getElementById("start-trial-btn");
 start_trial_btn.addEventListener("click", toggle_trial);
-
-let trial_number = 1;
 
 function remove_trial(trial_number){
     function on_click(){
@@ -357,9 +360,9 @@ function end_trial() {
     trials[trial_number] = active_trial;
     const trials_section = document.getElementById("trials-section");
     trials_section.prepend(create_trial_html(trial_number));
-    trial_number++;
     chart.data.datasets = get_selected_datasets(get_visible_trials());
     chart.update();
+    trial_number++;
 }
 
 // Tab switching
