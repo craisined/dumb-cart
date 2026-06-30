@@ -96,10 +96,6 @@ let pre_drag_limits = null;
 function label_content(ctx) {
     return [`${get_x()}: ${ctx.raw.x}`, `${ctx.dataset.label}: ${ctx.raw.y}`];
 }
-function label_content(ctx) {
-    console.log(ctx);
-    return `${ctx.dataset.label}: ${ctx.raw.y}`;
-}
 const chart_options = {
     animation: false,
     layout: { padding: 16 },
@@ -248,7 +244,7 @@ function update_selected_trials() {
         chart.update();
     }
 }
-document.querySelectorAll('input[name="y-axis"]').forEach(checkbox => {
+document.querySelectorAll('input[name="x-axis"], input[name="y-axis"]').forEach(checkbox => {
     checkbox.addEventListener('change', update_selected_trials);
 });
 
