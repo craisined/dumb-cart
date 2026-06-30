@@ -93,6 +93,13 @@ Chart.defaults.scales.linear = {
 
 let selection = null;
 let pre_drag_limits = null;
+function label_content(ctx) {
+    return [`${get_x()}: ${ctx.raw.x}`, `${ctx.dataset.label}: ${ctx.raw.y}`];
+}
+function label_content(ctx) {
+    console.log(ctx);
+    return `${ctx.dataset.label}: ${ctx.raw.y}`;
+}
 const chart_options = {
     animation: false,
     layout: { padding: 16 },
@@ -115,6 +122,12 @@ const chart_options = {
         },
         tooltip: {
             enabled: true,
+            backgroundColor: bg_subtle_color,
+            callbacks: {
+                label: label_content,
+                title: () => '',
+            },
+            displayColors: false,
         },
     },
     responsive: true,
@@ -202,6 +215,10 @@ disconnect_btn.addEventListener("click", disconnect_cart);
 let trials = {};
 let visible_trials = [];
 
+function get_x() {
+    return document.querySelector('input[name="x-axis"]:checked').value;
+}
+
 function get_visible_trials() {
     const checkboxes = document.querySelectorAll('input[name="trials"]:checked');
     const trial_indexes = Array.from(checkboxes).map(checkbox => checkbox.value);
@@ -214,11 +231,10 @@ function get_selected_datasets(trials) {
     const attributes = Array.from(checkboxes).map(checkbox => checkbox.value);
     let datasets = [];
     trials.forEach(trial => {
-        const x = 'time';
         attributes.forEach(attribute => {
             datasets.push({
                 label: attribute,
-                data: trial[x].map((value, index) => ({x: value, y: trial[attribute][index]})),
+                data: trial[get_x()].map((value, index) => ({x: value, y: trial[attribute][index]})),
             });
         });
     });
