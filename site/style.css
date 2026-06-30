@@ -16,8 +16,8 @@ body {
     color: var(--fg-color);
     display: grid;
     font-family: "Quicksand", sans-serif;
-    grid-template-columns: minmax(384px, 1fr) 384px;
-    grid-template-rows: minmax(288px, 1fr) 96px;
+    grid-template-columns: minmax(512px, 1fr) 512px;
+    grid-template-rows: minmax(512px, 1fr) 96px;
     grid-auto-flow: column;
     height: 100dvh;
     margin: 0;
@@ -78,9 +78,7 @@ select {
     border-radius: 0.5rem;
     color: var(--fg-color);
     background-color: var(--bg-color);
-    display: block;
     margin-bottom: 0.4rem;
-    width: 100%;
 }
 
 table {
@@ -115,6 +113,18 @@ td {
 
 .controls-container > i {
     font-size: 3rem;
+}
+
+.export-container {
+    display: flex;
+}
+
+#export-btn {
+    margin: 0.25rem;
+}
+
+#export-format {
+    flex: 1;
 }
 
 .panel {

@@ -1,4 +1,4 @@
-import { Chart, LineController, LineElement, PointElement, LinearScale } from 'https://cdn.jsdelivr.net/npm/chart.js@4.5.1/+esm';
+import { Chart, LineController, LineElement, PointElement, LinearScale, Tooltip } from 'https://cdn.jsdelivr.net/npm/chart.js@4.5.1/+esm';
 import chartjsPluginZoom from 'https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/+esm'
 import { parse, stringify } from 'https://cdn.jsdelivr.net/npm/@vanillaes/csv@4.1.3/+esm'
 
@@ -7,7 +7,8 @@ Chart.register(
     LineElement,
     PointElement,
     LinearScale,
-    chartjsPluginZoom
+    Tooltip,    
+    chartjsPluginZoom,
 );
 
 // Colors
@@ -111,7 +112,10 @@ const chart_options = {
                 onZoomStart: zoom_start,
                 onZoomComplete: zoom_complete,
             },
-        }
+        },
+        tooltip: {
+            enabled: true,
+        },
     },
     responsive: true,
     scales: {
