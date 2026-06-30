@@ -17,14 +17,13 @@ const bg_subtle_color = getComputedStyle(document.documentElement).getPropertyVa
 const fg_color = getComputedStyle(document.documentElement).getPropertyValue('--fg-color').trim();
 const highlight_color = getComputedStyle(document.documentElement).getPropertyValue('--highlight').trim();
 
-// TODO: Link to CSS
 const colors = {
-    red: "#cd8275",
-    green:"#70a97b",
-    yellow:"#ac975c",
-    blue: "#8396d1",
-    purple: "#bf7fb9",
-    cyan: "#5ea5b2",
+    red: getComputedStyle(document.documentElement).getPropertyValue('--red').trim(),
+    green: getComputedStyle(document.documentElement).getPropertyValue('--green').trim(),
+    yellow: getComputedStyle(document.documentElement).getPropertyValue('--yellow').trim(),
+    blue: getComputedStyle(document.documentElement).getPropertyValue('--blue').trim(),
+    purple: getComputedStyle(document.documentElement).getPropertyValue('--purple').trim(),
+    cyan: getComputedStyle(document.documentElement).getPropertyValue('--cyan').trim(),
 }
 
 const dataset_color = {

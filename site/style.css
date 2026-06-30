@@ -6,6 +6,13 @@
     --bg-subtle-color: #473439;
     --fg-color: #f1e9eb;
     --highlight: #cd8275;
+
+    --red: #cd8275;
+    --green: #70a97b;
+    --yellow: #ac975c;
+    --blue: #8396d1;
+    --purple: #bf7fb9;
+    --cyan: #5ea5b2;
 }
 
 html, body {
