@@ -170,7 +170,7 @@ function handle_characteristic_change(event) {
         encoder: sensor_dataview.getFloat32(offset += 4, true),
         time: sensor_dataview.getInt32(offset += 4, true),
     }
-    update_trial();
+    update_active_trial();
 }
 
 async function connect_cart(event) {
@@ -233,7 +233,6 @@ function get_selected_datasets(trials) {
     return datasets;
 }
 
-
 function update_selected_trials() {
     if (!active_trial) {
         chart.data.datasets = get_selected_datasets(get_visible_trials());
@@ -250,9 +249,9 @@ let start_time;
 let start_encoder;
 let trial_number = 0;
 
-const trial_shapes = ['circle', 'rect', 'triangle', 'rectRounded'];
+const trial_shapes = ['circle', 'rect', 'triangle'];
 
-function toggle_trial(event) {
+function toggle_active_trial(event) {
     if (!sensor_data || !ble_device) { return null; }
     if (!active_trial) {
         active_trial = {
@@ -262,19 +261,22 @@ function toggle_trial(event) {
             encoder: [],
             name: `Trial ${trial_number + 1}`,
             shape: trial_shapes[trial_number % trial_shapes.length],
+            mass: 0.1,
         };
         start_time = sensor_data.time;
         start_encoder = sensor_data.encoder;
-        update_trial();
+        update_active_trial();
     } else {
         end_trial();
-        active_trial = null;
     }
     start_trial_btn.classList.remove(active_trial ? "bi-play-circle-fill" : "bi-pause-circle-fill");
     start_trial_btn.classList.add(active_trial ? "bi-pause-circle-fill" : "bi-play-circle-fill");
 }
 
-function update_trial() {
+const start_trial_btn = document.getElementById("start-trial-btn");
+start_trial_btn.addEventListener("click", toggle_active_trial);
+
+function update_active_trial() {
     if (!active_trial) { return null; }
     let data = {
         time: (sensor_data.time - start_time) / 1000,
@@ -289,27 +291,7 @@ function update_trial() {
     chart.update();
 }
 
-const start_trial_btn = document.getElementById("start-trial-btn");
-start_trial_btn.addEventListener("click", toggle_trial);
-
-function remove_trial(trial_number){
-    function on_click(){
-        delete trials[trial_number];
-        document.getElementById(`trial-${trial_number}-container`).remove();
-        update_selected_trials();
-    }
-    return on_click;
-}
-
-function rename_trial(trial_number){
-    function on_click(){
-        const new_name = prompt(`Rename ${trials[trial_number].name}:`);
-        trials[trial_number].name = new_name;
-        document.getElementById(`trial-${trial_number}-header`).innerText = new_name;
-    }
-    return on_click;
-}
-
+const trial_icons = ['bi-circle-fill', 'bi-square-fill', 'bi-triangle-fill'];
 function create_trial_html(trial_number){
     const container_div = document.createElement('div');
     container_div.id = `trial-${trial_number}-container`;
@@ -319,6 +301,8 @@ function create_trial_html(trial_number){
     header_span.textContent = trials[trial_number].name;
     const btn_span = document.createElement('span');
     btn_span.className = 'trial-btns';
+    const header_icon = document.createElement('i');
+    header_icon.className = `bi ${trial_icons[trial_number % trial_icons.length]}`;
     const checkbox_input = document.createElement('input');
     checkbox_input.type = 'checkbox';
     checkbox_input.name = 'trials';
@@ -346,10 +330,20 @@ function create_trial_html(trial_number){
     const mass_label = document.createElement('label');
     mass_label.textContent = 'Cart Mass: ';
     const mass_input = document.createElement('input');
-    mass_input.type = 'input'; 
+    mass_input.type = 'number';
+    mass_input.step = 'any';
     mass_input.name = `mass-${trial_number}`;
+    mass_input.value = trials[trial_number].mass;
+    function change_mass_event(event){
+        let mass = event.target.valueAsNumber;
+        if ( Number.isNaN(mass) ) { return null; }
+        trials[trial_number].mass = mass;
+        console.log(trials[trial_number]);
+        update_selected_trials();
+    }
+    mass_input.addEventListener('change', change_mass_event);
     const kg_text = document.createTextNode(' kg');
-    btn_span.append(checkbox_input, edit_icon, delete_icon);
+    btn_span.append(header_icon, checkbox_input, edit_icon, delete_icon);
     header_h3.append(header_span, btn_span);
     mass_label.append(mass_input, kg_text);
     container_div.append(header_h3, mass_label);
@@ -360,8 +354,8 @@ function end_trial() {
     trials[trial_number] = active_trial;
     const trials_section = document.getElementById("trials-section");
     trials_section.prepend(create_trial_html(trial_number));
-    chart.data.datasets = get_selected_datasets(get_visible_trials());
-    chart.update();
+    active_trial = null;
+    update_selected_trials();
     trial_number++;
 }
 
