@@ -337,6 +337,7 @@ const trial_shapes = ['circle', 'rect', 'triangle'];
 function toggle_active_trial(event) {
     if (!sensor_data || !ble_device) { return null; }
     if (!active_trial) {
+        chart.resetZoom();
         active_trial = {
             time: [],
             acceleration: [],
