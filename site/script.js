@@ -201,6 +201,12 @@ const disconnect_btn = document.getElementById("disconnect-btn");
 connect_btn.addEventListener("click", connect_cart);
 disconnect_btn.addEventListener("click", disconnect_cart);
 
+// Selection
+function get_selected_regions() {
+    const datasets = get_selected_datasets(trials);
+    Object.entries(datasets).forEach(([trial_number, trial]) => {});
+}
+
 // Trials
 let trials = {};
 let visible_trials = [];
@@ -261,7 +267,9 @@ function toggle_active_trial(event) {
             name: `Trial ${trial_number + 1}`,
             shape: trial_shapes[trial_number % trial_shapes.length],
             mass: 0.1,
+            number: trial_number,
         };
+        trial_number++;
         start_time = sensor_data.time;
         start_encoder = sensor_data.encoder;
         update_active_trial();
@@ -350,12 +358,11 @@ function create_trial_html(trial_number) {
 }
 
 function end_trial() {
-    trials[trial_number] = active_trial;
+    trials[active_trial.number] = active_trial;
     const trials_section = document.getElementById("trials-section");
-    trials_section.prepend(create_trial_html(trial_number));
+    trials_section.prepend(create_trial_html(active_trial.number));
     active_trial = null;
     update_selected_trials();
-    trial_number++;
 }
 
 // Tab switching
