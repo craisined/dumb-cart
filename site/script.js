@@ -67,7 +67,7 @@ function zoom_complete({ chart }) {
     };
     chart.zoomScale('x', { min: pre_drag_limits.min, max: pre_drag_limits.max });
     pre_drag_limits = null;
-    get_selected_points();
+    update_selection_table();
 }
 Chart.defaults.datasets.line = {
     ...Chart.defaults.datasets.line,
@@ -203,11 +203,85 @@ connect_btn.addEventListener("click", connect_cart);
 disconnect_btn.addEventListener("click", disconnect_cart);
 
 // Selection
-function get_selected_points() {
-    const datasets = get_selected_datasets(get_visible_trials());
-    let points = datasets.map(trial => trial.data.filter(point => (selection.min <= point.x && point.x <= selection.max)));
-    console.log(points);
-    return points;
+function get_selected_points(trials) {
+    const checkboxes = document.querySelectorAll('input[name="y-axis"]:checked');
+    const selected_attributes = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+    let points = [];
+    let names = [];
+    let attributes = [];
+
+    if (selection === null) {return [0, [], [], []]};
+
+    for (const trial of trials) {
+        for (const attribute of selected_attributes) {
+            points.push(
+                trial[get_x()].filter(x => selection.min <= x && x <= selection.max).map((value, index) => ({ x: value, y: trial[attribute][index] }))
+            );
+            names.push(trial.name);
+            attributes.push(attribute);
+        }
+    }
+    return [trials.length * selected_attributes.length, points, names, attributes];
+}
+
+function trial_min(trial) {
+    return Math.min(...trial.map(point => point.y));
+}
+
+function trial_max(trial) {
+    return Math.max(...trial.map(point => point.y));
+}
+
+function trial_mean(trial) {
+    return trial_area(trial) / (trial[trial.length - 1].x - trial[0].x);
+}
+
+function trial_median(trial) {
+    let sorted_points = trial.map(point => point.y);
+    sorted_points.sort();
+    let weight_target = trial[trial.length - 1].x - trial[0].x;
+    let current_weight = 0;
+    for (let i = 0; i < trial.length - 1; i++) {
+        current_weight += trial[i + 1].x - trial[i].x;
+        if (current_weight >= weight_target) {
+            return trial[i].y
+        }
+    }
+    return trial[trial.length - 1].y;
+}
+
+function trial_area(trial) {
+    let area = 0;
+    for (let i = 0; i < trial.length - 1; i++) {
+        area += (trial[i].y + trial[i + 1].y) * (0.5 * (trial[i + 1].x - trial[i].x));
+    }
+    return area;    
+}
+
+function update_selection_table() {
+    const table_body = document.querySelector('#selection-table > tbody');
+    table_body.replaceChildren();
+    let [n, trial_data, trial_names, attributes] = get_selected_points(get_visible_trials());
+    for (let i = 0; i < n; i++) {
+        if (trial_data[i].length == 0) {
+            continue;
+        }
+        let new_row = table_body.insertRow(-1);
+        [
+            trial_names[i],
+            attributes[i],
+            trial_min(trial_data[i]), 
+            trial_max(trial_data[i]),
+            trial_mean(trial_data[i]),
+            trial_median(trial_data[i]),
+            trial_area(trial_data[i])
+        ].forEach((value, col) => {
+            let cell = new_row.insertCell(col);
+            cell.textContent = value;
+        });
+    }
+    console.log(get_selected_points(get_visible_trials()));
 }
 
 // Trials
@@ -245,6 +319,7 @@ function update_selected_trials() {
     if (!active_trial) {
         chart.data.datasets = get_selected_datasets(get_visible_trials());
         chart.update();
+        update_selection_table();
     }
 }
 document.querySelectorAll('input[name="x-axis"], input[name="y-axis"]').forEach(checkbox => {
