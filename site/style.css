@@ -15,6 +15,22 @@
     --cyan: #5ea5b2;
 }
 
+/*
+Catpuccin
+:root{
+    --bg-color: #303446;
+    --fg-color: #f2d5cf;
+    --bg-subtle-color: #51576d;
+    --highlight: var(--purple);
+    --red: #e78284;
+    --green: #a6d189;
+    --yellow: #e5c890;
+    --blue: #8caaee;
+    --purple: #f4b8e4;
+    --cyan: #81c8be;
+}
+*/
+
 html, body {
     width: 100%;
 }
@@ -186,6 +202,18 @@ td {
 .panel-nav-btn-selected {
     background-color: var(--bg-subtle-color);
     flex: 2;
+}
+
+#selection-table:has(thead + tbody:empty) {
+   display: none;
+}
+
+#selection-empty-msg {
+    display: none;
+}
+
+#selection-table:has(thead + tbody:empty) + #selection-empty-msg {
+    display: block;
 }
 
 .trial-btns {
