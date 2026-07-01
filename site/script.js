@@ -7,7 +7,7 @@ Chart.register(
     LineElement,
     PointElement,
     LinearScale,
-    Tooltip,    
+    Tooltip,
     chartjsPluginZoom,
 );
 
@@ -201,7 +201,6 @@ const disconnect_btn = document.getElementById("disconnect-btn");
 connect_btn.addEventListener("click", connect_cart);
 disconnect_btn.addEventListener("click", disconnect_cart);
 
-// TODO: x-axis stuff
 // Trials
 let trials = {};
 let visible_trials = [];
@@ -225,7 +224,7 @@ function get_selected_datasets(trials) {
         attributes.forEach(attribute => {
             datasets.push({
                 label: attribute,
-                data: trial[get_x()].map((value, index) => ({x: value, y: trial[attribute][index]})),
+                data: trial[get_x()].map((value, index) => ({ x: value, y: trial[attribute][index] })),
                 pointStyle: trial.shape,
             });
         });
@@ -292,7 +291,7 @@ function update_active_trial() {
 }
 
 const trial_icons = ['bi-circle-fill', 'bi-square-fill', 'bi-triangle-fill'];
-function create_trial_html(trial_number){
+function create_trial_html(trial_number) {
     const container_div = document.createElement('div');
     container_div.id = `trial-${trial_number}-container`;
     const header_h3 = document.createElement('h3');
@@ -312,7 +311,7 @@ function create_trial_html(trial_number){
     const edit_icon = document.createElement('i');
     edit_icon.className = 'bi bi-pencil-square';
     edit_icon.id = `rename-trial-${trial_number}`;
-    function edit_icon_event(){
+    function edit_icon_event() {
         const new_name = prompt(`Rename ${trials[trial_number].name}:`);
         trials[trial_number].name = new_name;
         document.getElementById(`trial-${trial_number}-header`).innerText = new_name;
@@ -321,7 +320,7 @@ function create_trial_html(trial_number){
     const delete_icon = document.createElement('i');
     delete_icon.className = 'bi bi-x-lg';
     delete_icon.id = `delete-trial-${trial_number}`;
-    function delete_icon_event(){
+    function delete_icon_event() {
         delete trials[trial_number];
         document.getElementById(`trial-${trial_number}-container`).remove();
         update_selected_trials();
@@ -334,9 +333,9 @@ function create_trial_html(trial_number){
     mass_input.step = 'any';
     mass_input.name = `mass-${trial_number}`;
     mass_input.value = trials[trial_number].mass;
-    function change_mass_event(event){
+    function change_mass_event(event) {
         let mass = event.target.valueAsNumber;
-        if ( Number.isNaN(mass) ) { return null; }
+        if (Number.isNaN(mass)) { return null; }
         trials[trial_number].mass = mass;
         console.log(trials[trial_number]);
         update_selected_trials();
