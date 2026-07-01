@@ -67,6 +67,7 @@ function zoom_complete({ chart }) {
     };
     chart.zoomScale('x', { min: pre_drag_limits.min, max: pre_drag_limits.max });
     pre_drag_limits = null;
+    get_selected_points();
 }
 Chart.defaults.datasets.line = {
     ...Chart.defaults.datasets.line,
@@ -202,9 +203,11 @@ connect_btn.addEventListener("click", connect_cart);
 disconnect_btn.addEventListener("click", disconnect_cart);
 
 // Selection
-function get_selected_regions() {
-    const datasets = get_selected_datasets(trials);
-    Object.entries(datasets).forEach(([trial_number, trial]) => {});
+function get_selected_points() {
+    const datasets = get_selected_datasets(get_visible_trials());
+    let points = datasets.map(trial => trial.data.filter(point => (selection.min <= point.x && point.x <= selection.max)));
+    console.log(points);
+    return points;
 }
 
 // Trials
