@@ -473,7 +473,11 @@ nav_tabs.forEach(tab => {
 // Export image
 document.getElementById('export-btn').addEventListener('click', () => {
     const format = document.getElementById('export-format').value;
-    if (format === 'png' || format === 'jpeg') { export_image(format); }
+    if (format === 'png' || format === 'jpeg') {
+        export_image(format);
+    } else {
+        export_csv();
+    }
 });
 
 function export_image(format) {
@@ -488,6 +492,27 @@ function export_image(format) {
     a.href = bg_canvas.toDataURL(`image/${format}`);
     a.download = `lab.${format}`;
     a.click();
+}
+
+function export_csv() {
+    const attributes = ["time", "acceleration", "encoder", "force"];
+    let data = [["Trial Number", "Trial"].concat(attributes)];
+    Object.entries(trials).forEach(([trial_number, trial]) => {
+        for (let i = 0; i < trial.time.length; i++) {
+            data.push([trial.number, trial.name].concat(attributes.map(attribute => trial[attribute][i])));
+        }
+    });
+    console.log(data);
+    let csv_text = stringify(data);
+    const blob = new Blob([csv_text], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'my_data.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
 
 // Selection/pan buttons
