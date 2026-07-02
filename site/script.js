@@ -187,16 +187,24 @@ async function connect_cart(event) {
     ble_sensor_characteristic = await ble_service.getCharacteristic(characteristic_uuid);
     ble_sensor_characteristic.startNotifications();
     ble_sensor_characteristic.addEventListener('characteristicvaluechanged', handle_characteristic_change);
+    ble_device.addEventListener('gattserverdisconnected', on_disconnect);
     console.log("Connected! Device: ", ble_device.name);
 }
 
 async function disconnect_cart(event) {
     if (!ble_device || !ble_device.gatt.connected) {
         console.log("Already disconnected!");
+        return null;
     }
     ble_device.gatt.disconnect();
+}
+
+function on_disconnect(event) {
+    ble_device = null;
+    sensor_data = null;
     console.log("Disconnected!");
 }
+
 const connect_btn = document.getElementById("connect-btn");
 const disconnect_btn = document.getElementById("disconnect-btn");
 connect_btn.addEventListener("click", connect_cart);
