@@ -9,6 +9,9 @@
 #include <Wire.h>
 
 const float gravity = 9.81;
+const float pi = 3.14;
+const float meter_per_ticks = (0.04 * pi) / (18 * 4);
+const float newtons_per_ticks = (0.33 * gravity) / 63720; // measured by ito en
 
 // accelerometer attaches to I2C slot, load cell attaches to A0/D0 slot, encoder attaches to UART slot
 const uint8_t accelerometer_addr = 0x6A;
@@ -24,7 +27,7 @@ Encoder encoder(encoder_pin_1, encoder_pin_2);
 typedef struct{
     float acceleration;
     float force;
-    float encoder_position;
+    float distance;
     int time;
 } Sensors;
 Sensors sensors;
@@ -88,8 +91,8 @@ void begin_bluetooth(){
 
 void update_sensors(){
     sensors.acceleration = accelerometer.readFloatAccelX() * gravity;
-    sensors.force = load_cell.readChannelBlocking(CHAN_A_GAIN_128);
-    sensors.encoder_position = encoder.read();
+    sensors.force = load_cell.readChannelBlocking(CHAN_A_GAIN_128) * newtons_per_ticks;
+    sensors.distance = encoder.read() * meter_per_ticks;
     sensors.time = millis();
 }
 
