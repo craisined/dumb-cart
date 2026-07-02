@@ -200,6 +200,9 @@ async function disconnect_cart(event) {
 }
 
 function on_disconnect(event) {
+    if (active_trial) {
+        end_trial();
+    }
     ble_device = null;
     sensor_data = null;
     console.log("Disconnected!");
