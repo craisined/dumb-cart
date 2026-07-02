@@ -320,7 +320,7 @@ function get_selected_datasets(trials) {
             datasets.push({
                 label: attribute,
                 data: trial[get_x()].map((value, index) => ({ x: value, y: trial[attribute][index] })),
-                pointStyle: trial.shape,
+                pointStyle: trial_shapes[trial.number % trial_shapes.length],
             });
         });
     });
@@ -356,7 +356,6 @@ function toggle_active_trial(event) {
             force: [],
             encoder: [],
             name: `Trial ${trial_number + 1}`,
-            shape: trial_shapes[trial_number % trial_shapes.length],
             mass: 0.1,
             number: trial_number,
         };
@@ -479,6 +478,13 @@ document.getElementById('export-btn').addEventListener('click', () => {
         export_csv();
     }
 });
+document.getElementById('import-select').addEventListener('change', (event) => {
+    const file = event.target.files[0]; 
+    if (!file) { return null };
+    const reader = new FileReader();
+    reader.onload = import_csv;
+    reader.readAsText(file);
+});
 
 function export_image(format) {
     const bg_canvas = document.createElement('canvas');
@@ -496,23 +502,53 @@ function export_image(format) {
 
 function export_csv() {
     const attributes = ["time", "acceleration", "encoder", "force"];
-    let data = [["Trial Number", "Trial"].concat(attributes)];
+    let data = [["Number", "Name", "Mass"].concat(attributes)];
     Object.entries(trials).forEach(([trial_number, trial]) => {
         for (let i = 0; i < trial.time.length; i++) {
-            data.push([trial.number, trial.name].concat(attributes.map(attribute => trial[attribute][i])));
+            data.push([trial.number, trial.name, trial.mass].concat(attributes.map(attribute => trial[attribute][i])));
         }
     });
-    console.log(data);
     let csv_text = stringify(data);
     const blob = new Blob([csv_text], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'my_data.csv');
+    link.setAttribute('download', 'cart_data.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+}
+
+function import_csv(event) {
+    const csv = event.target.result;
+    const [headers, ...data] = parse(csv);
+    const rows = data.map(row => 
+        Object.fromEntries(row.map((value, i) => [headers[i], value]))
+    );
+    const trials_section = document.getElementById("trials-section");
+    trials = {};
+    let row_num;
+    for (const row of rows) {
+        row_num = parseInt(row.Number);
+        if (!(row_num in trials)) {
+            trials[row.Number] = {
+                acceleration: [],
+                encoder: [],
+                force: [],
+                time: [],
+                mass: parseFloat(row.Mass),
+                name: row.Name,
+                number: row_num,
+            }
+            trials_section.prepend(create_trial_html(row.Number));
+        }
+        trials[row_num].time.push(parseFloat(row.time));
+        trials[row_num].acceleration.push(parseFloat(row.acceleration));
+        trials[row_num].encoder.push(parseFloat(row.encoder));
+        trials[row_num].force.push(parseFloat(row.force));
+    }
+    update_selected_trials();
 }
 
 // Selection/pan buttons
