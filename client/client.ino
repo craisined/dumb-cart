@@ -106,7 +106,7 @@ void setup() {
 
 void loop() {
     update_sensors();
-    if (millis() - last_send > 50){
+    if (millis() - last_send > 100){
         update_bluetooth();
         last_send = millis();
     }
