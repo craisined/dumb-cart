@@ -216,7 +216,7 @@ function get_selected_points(trials) {
     for (const trial of trials) {
         for (const attribute of selected_attributes) {
             points.push(
-                trial[get_x()].filter(x => selection.min <= x && x <= selection.max).map((value, index) => ({ x: value, y: trial[attribute][index] }))
+                trial[get_x()].map((value, index) => ({ x: value, y: trial[attribute][index] })).filter(point => selection.min <= point.x && point.x <= selection.max)
             );
             names.push(trial.name);
             attributes.push(attribute);
@@ -281,7 +281,6 @@ function update_selection_table() {
             cell.textContent = value;
         });
     }
-    console.log(get_selected_points(get_visible_trials()));
 }
 
 // Trials
