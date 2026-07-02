@@ -202,7 +202,6 @@ async function disconnect_cart(event) {
 function on_disconnect(event) {
     if (active_trial) {
         end_trial();
-        active_trial = null;
         start_trial_btn.classList.remove("bi-pause-circle-fill");
         start_trial_btn.classList.add("bi-play-circle-fill");
     }
