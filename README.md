@@ -2,7 +2,7 @@
 
 ## Website Access
 
-The website can currently be found [https://opencart.craisin.tech], though this is tentative to change
+The website can currently be found https://opencart.craisin.tech, though this is tentative
 
 ## Install Cart Firmware 🧑‍💻
 
