@@ -1,5 +1,9 @@
 # Dumb Cart 🚗
 
+## Website Access
+
+The website can currently be found [https://opencart.craisin.tech], though this is tentative to change
+
 ## Install Cart Firmware 🧑‍💻
 
 ### CLI
@@ -12,10 +16,11 @@ arduino-cli core install esp32:esp32
 arduino-cli lib install "Encoder" "Seeed Arduino LSM6DS3" "Adafruit HX711"
 ```
 
-Upload precompiled binary, replacing `/dev/ttyACM0` with the path of the port the microcontroller is plugged into:
+Cinouke and upload binary, replacing `/dev/ttyACM0` with the path of the port the microcontroller is plugged into:
 ```bash
 git clone https://github.com/craisined/dumb-cart.git
-arduino-cli upload -p /dev/ttyACM0 --fqbn esp32:esp32:XIAO_ESP32C6 --input-file client/client.bin
+arduino-cli compile --fqbn esp32:esp32:XIAO_ESP32C6 client
+arduino-cli upload -p /dev/ttyACM0 --fqbn esp32:esp32:XIAO_ESP32C6 client
 ```
 ### IDE
 
@@ -26,6 +31,13 @@ arduino-cli upload -p /dev/ttyACM0 --fqbn esp32:esp32:XIAO_ESP32C6 --input-file 
 5. Open [client.ino](client/client.ino) and upload to the board
 
 ## Assemble Hardware 🔧
+
+### Hardware
+
+1. Print out [dumb_cart.gcode.3mf](cad/dumb_cart.gcode.3mf), retaining all the print settings (tested with pla)
+2. Push in bearings
+3. Screw in electronics
+4. Push in axles, then screw wheels onto axles
 
 ### Electronics
 
