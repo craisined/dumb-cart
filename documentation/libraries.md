@@ -9,5 +9,4 @@
 ## Frontend Libraries 💻
 
 - https://www.chartjs.org/
-- https://github.com/01CodeLT/chartjs-plugin-selectdrag
 - https://www.chartjs.org/chartjs-plugin-zoom/latest/guide/
